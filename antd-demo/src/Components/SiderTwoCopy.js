@@ -19,6 +19,10 @@ const data1 = [
   'to-do 1',
   'to-do 2',
 ];
+const data2 = [
+  '今日?/总日程1',
+  '今日?/总日程2',
+];
 class ChooseForm extends Component{
   constructor(props){
     super(props);
@@ -83,6 +87,7 @@ class SiderTwoCopy extends Component{
             style={{ height: '100%', borderRight: 0 }}
           >
             <SubMenu key="sub1" icon={<UserOutlined />} title="日程">
+            <MyList data={data2}/> 
             </SubMenu>
           </Menu>
         </Sider>
