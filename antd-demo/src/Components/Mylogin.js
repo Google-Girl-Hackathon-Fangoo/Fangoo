@@ -1,17 +1,33 @@
 import React, { Component } from 'react';
 import 'antd/dist/antd.css';
-import { Form, Input, Button, Checkbox,Space } from 'antd';
+import { message,Form, Input, Button, Checkbox,Space } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import MyRegister from './MyRegister.js';
+import axios from 'axios';
 export default class Mylogin extends Component {
   constructor(props) {
     super(props)
   }
   render(){
+    /*
   const onFinish = values => {
     console.log('Received values of form: ', values);
   };
+  */
+  const onFinish = (values) => {
+    console.log(values)
+    axios.post("/users/login",{
+      data: values
+    }).then((response)=>{
+      console.log(response.data)
+      if (response.data.msg === 'success'){
+        message.success('Login Succed!')
+      }else{
+        message.warn('Login Failed')
+      }
+    })
+  }
 
   return (
     <Form
