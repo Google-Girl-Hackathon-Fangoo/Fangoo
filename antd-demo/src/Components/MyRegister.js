@@ -1,5 +1,6 @@
 import React, { useState ,Component} from "react";
 import { Link } from 'react-router-dom';
+import { message} from 'antd';
 import "antd/dist/antd.css";
 import {
   Form,
@@ -15,6 +16,7 @@ import {
   Space
 } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
+import axios from 'axios';
 const { Option } = Select;
 const AutoCompleteOption = AutoComplete.Option;
 const residences = [
@@ -85,9 +87,24 @@ const tailFormItemLayout = {
 const MyRegister= () => {
   const [form] = Form.useForm();
 
+  /*
   const onFinish = values => {
     console.log("Received values of form: ", values);
   };
+  */
+ const onFinish = (values) => {
+  console.log(values)
+  axios.post("/users/register",{
+    data: values
+  }).then((response)=>{
+    console.log(response.data)
+    if (response.data.msg === 'success'){
+      message.success('Register Succed!')
+    }else{
+      message.warn('Register Failed')
+    }
+  })
+}
   
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
