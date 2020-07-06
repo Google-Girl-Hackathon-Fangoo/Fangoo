@@ -9,16 +9,30 @@ import {
   Row,
   Input,
   Select,
-  DatePicker
+  DatePicker,
+  message
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-
+import axios from 'axios';
 const { Option } = Select;
 
 export default class MyForm1 extends React.Component {
     render(){
+      const onFinish = (values) => {
+        console.log(values)
+        axios.post("/users/schedule",{
+          data: values
+        }).then((response)=>{
+          console.log(response.data)
+          if (response.data.msg === 'success'){
+            message.success('Create Succed!')
+          }else{
+            message.warn('Create Failed')
+          }
+        })
+      }
         return(
-    <Form layout="vertical" hideRequiredMark>
+    <Form layout="vertical" hideRequiredMark  onFinish={onFinish}>
     <Row gutter={16}>
       <Col span={12}>
         <Form.Item
@@ -78,11 +92,11 @@ export default class MyForm1 extends React.Component {
           rules={[
             {
               required: true,
-              message: 'please enter url description',
+              message: 'please enter description',
             },
           ]}
         >
-          <Input.TextArea rows={4} placeholder="please enter url description" />
+          <Input.TextArea rows={4} placeholder="please enter description" />
         </Form.Item>
       </Col>
     </Row>
