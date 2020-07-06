@@ -1,6 +1,7 @@
 import React,{ Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Layout, Menu, Button, Space, Tooltip, Drawer, Select } from 'antd';
+import { Form,Layout, Menu, Button, Space, Tooltip, Drawer, Select, message } from 'antd';
+import {Row,Col,Input,DatePicker} from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
 import './SiderTwo.css';
@@ -10,6 +11,8 @@ import MyCard from './MyCard.js';
 import MyList from './MyList.js';
 import MyForm1 from './MyForm1.js';
 import MyForm2 from './MyForm2.js';
+import axios from 'axios';
+import { formatCountdown } from 'antd/lib/statistic/utils';
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 const { Option } = Select;
@@ -52,6 +55,19 @@ class SiderTwo extends Component{
     });
   };
   render(){
+    const onFinish = (values) => {
+      console.log(values)
+      axios.post("/users/schedule",{
+        data: values
+      }).then((response)=>{
+        console.log(response.data)
+        if (response.data.msg === 'success'){
+          message.success('Create Succed!')
+        }else{
+          message.warn('Create Failed')
+        }
+      })
+    }
     return (
     <Layout>
        <Header className="header">
@@ -104,22 +120,85 @@ class SiderTwo extends Component{
             onClose={this.onClose}
             visible={this.state.visible}
             bodyStyle={{ paddingBottom: 80 }}
-            footer={
-              <div
-                style={{
-                  textAlign: 'right',
-                }}
-              >
-                <Button onClick={this.onClose} style={{ marginRight: 8 }}>
-                  Cancel
-                </Button>
-                <Button onClick={this.onClose} type="primary">
-                  Submit
-                </Button>
-              </div>
-            }
           >
-            <ChooseForm type={this.state.type}/>
+            {/*<ChooseForm type={this.state.type}/>*/}
+          <Form layout="vertical" hideRequiredMark  onFinish={onFinish}>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                  name="name"
+                  label="Name"
+                rules={[{ required: true, message: 'Please enter user name' }]}
+              >
+                <Input placeholder="Please enter user name" />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={12}>
+              <Form.Item
+                name="type"
+                label="Type"
+                rules={[{ required: true, message: 'Please choose the type' }]}
+              >
+                <Select placeholder="Please choose the type">
+                  <Option value="personal">Personal</Option>
+                  <Option value="group">Group</Option>
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="cooperator"
+                label="Cooperator"
+                rules={[{ required: true, message: 'Please choose the approver' }]}
+              >
+                <Select placeholder="Please choose the approver">
+                  <Option value="jack">Jack Ma</Option>
+                  <Option value="tom">Tom Liu</Option>
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="dateTime"
+                label="DateTime"
+                rules={[{ required: true, message: 'Please choose the dateTime' }]}
+              >
+                <DatePicker.RangePicker
+                  style={{ width: '100%' }}
+                  getPopupContainer={trigger => trigger.parentNode}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={24}>
+              <Form.Item
+                name="description"
+                label="Description"
+                rules={[
+                  {
+                    required: true,
+                    message: 'please enter description',
+                  },
+                ]}
+              >
+                <Input.TextArea rows={4} placeholder="please enter description" />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Form.Item>
+                <Button onClick={this.onClose} style={{ marginRight: 8 }}>
+                    Cancel
+                  </Button>
+                <Button htmlType='submit' onClick={this.onClose} type="primary" >
+                    Submit
+                </Button>
+          </Form.Item>
+          </Form>
         </Drawer>
             {/* Sample1: <MyCard/> LIST may be better? */}
             {/* Sample2: <MyList/>*/}
