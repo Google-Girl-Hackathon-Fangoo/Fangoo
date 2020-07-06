@@ -9,16 +9,31 @@ import {
   Row,
   Input,
   Select,
-  DatePicker
+  DatePicker,
+  message
 } from "antd";
+import axios from 'axios';
 import { PlusOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 
 export default class MyForm2 extends React.Component {
     render(){
+      const onFinish = (values) => {
+        console.log(values)
+        axios.post("/users/task",{
+          data: values
+        }).then((response)=>{
+          console.log(response.data)
+          if (response.data.msg === 'success'){
+            message.success('Create Succed!')
+          }else{
+            message.warn('Create Failed')
+          }
+        })
+      }
         return(
-    <Form layout="vertical" hideRequiredMark>
+    <Form layout="vertical" hideRequiredMark onFinish={onFinish}>
     <Row gutter={16}>
       <Col span={12}>
         <Form.Item
