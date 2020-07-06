@@ -35,7 +35,7 @@ export default class SiderDemo extends Component{
             style={{ height: '100%', borderRight: 0 }}
           >
             <SubMenu key="sub1" icon={<UserOutlined />} title="个人信息">
-              <Menu.Item key="1">日程</Menu.Item>
+              <Menu.Item key="1"><Link to="/SiderTwo">日程</Link></Menu.Item>
               <Menu.Item key="2">近期使用情况</Menu.Item>
               <Menu.Item key="3">option3</Menu.Item>
               <Menu.Item key="4">option4</Menu.Item>
@@ -75,7 +75,7 @@ export default class SiderDemo extends Component{
           >
         <SubMenu key="sub1" icon={<UserOutlined />} title="Add">
               <Menu.Item key="5">添加好友</Menu.Item>
-              <Menu.Item key="6">添加群</Menu.Item>
+              <Menu.Item key="6">添加小组</Menu.Item>
         </SubMenu>
              <Menu.Item key="1">签到</Menu.Item>
               <Menu.Item key="2">安排会议</Menu.Item>
