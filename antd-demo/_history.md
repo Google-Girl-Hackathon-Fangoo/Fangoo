@@ -149,3 +149,7 @@ It may be helpful to find the proper one in case we need to revert to the old ve
 ##### update3
 
 ​		update page2 "task" with checkbox-group
+
+##### update4
+
+​		add page3 group-schedule
