@@ -20,9 +20,9 @@ use `npm install`and `npm start` in each folder
 
   ​		"data":{"username": xxx, "password": xxx, "email": xxx, "nickname": xxx}
 
-- [ ] captcha
+- [x] captcha
 
-  ​	/captcha
+  ​	/users/captcha
 
   ​		"data":{"email": xxx}
 
