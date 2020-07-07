@@ -1,7 +1,7 @@
 import React,{ Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Form,Layout, Menu, Button, Space, Tooltip, Drawer, Select, message } from 'antd';
-import {Row,Col,Input,DatePicker} from 'antd';
+import {Row,Col,Input,DatePicker,Checkbox} from 'antd';
 import { ScheduleOutlined, CarryOutOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
 import './SiderTwo.css';
@@ -39,6 +39,15 @@ class ChooseForm extends Component{
   }
   
 }
+function onChange(checkedValues) {
+  console.log('checked = ', checkedValues);
+}
+const plainOptions = ['Apple', 'Pear', 'Orange'];
+const options = [
+  { label: 'Apple', value: 'Apple' },
+  { label: 'Pear', value: 'Pear' },
+  { label: 'Orange', value: 'Orange' },
+];
 class SiderTwo extends Component{
   state = { visible: false,type: true};
   showDrawer1=() =>{
@@ -220,7 +229,12 @@ class SiderTwo extends Component{
             style={{ height: '100%', borderRight: 0 }}
           >
             <SubMenu key="sub1" icon={<CarryOutOutlined />} title="Task">
-            <MyList data={data1}/> 
+            
+            {/*<MyList data={data1}/> 
+            <Checkbox.Group options={plainOptions} defaultValue={['Apple']} onChange={onChange} />
+            */}
+            <Checkbox.Group options={options} /*defaultValue={['Pear']}*/ onChange={onChange} />
+            
             <div align='right'>
               <Tooltip title='Click twice'>
             <Button type='primary' shape="circle"><Link to="/SiderTwoCopy">+</Link></Button>

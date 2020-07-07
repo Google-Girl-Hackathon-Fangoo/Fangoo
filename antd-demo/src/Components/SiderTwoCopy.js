@@ -1,7 +1,7 @@
 import React,{ Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Form, Layout, Menu, Button, Space, Tooltip, Drawer, Select, message } from 'antd';
-import {Row,Col,Input,DatePicker} from 'antd';
+import {Row,Col,Input,DatePicker,Checkbox} from 'antd';
 import { ScheduleOutlined, CarryOutOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
 import './SiderTwoCopy.css';
@@ -22,6 +22,14 @@ const data1 = [
 const data2 = [
   '今日?/总日程1',
   '今日?/总日程2',
+];
+function onChange(checkedValues) {
+  console.log('checked = ', checkedValues);
+}
+const options = [
+  { label: 'Apple', value: 'Apple' },
+  { label: 'Pear', value: 'Pear' },
+  { label: 'Orange', value: 'Orange' },
 ];
 class ChooseForm extends Component{
   constructor(props){
@@ -219,7 +227,8 @@ class SiderTwoCopy extends Component{
             style={{ height: '100%', borderRight: 0 }}
           >
             <SubMenu key="sub1" icon={<CarryOutOutlined />} title="Task">
-            <MyList data={data1}/> 
+            {/*<MyList data={data1}/>  */}
+            <Checkbox.Group options={options} /*defaultValue={['Pear']}*/ onChange={onChange} />
             <div align='right'>
             <Button type='primary' shape="circle" onClick={this.showDrawer}>+</Button>
             </div>
