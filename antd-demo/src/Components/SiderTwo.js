@@ -2,7 +2,7 @@ import React,{ Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Form,Layout, Menu, Button, Space, Tooltip, Drawer, Select, message } from 'antd';
 import {Row,Col,Input,DatePicker} from 'antd';
-import { UserOutlined } from '@ant-design/icons';
+import { ScheduleOutlined, CarryOutOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
 import './SiderTwo.css';
 import SiderDemo from './SiderDemo.js';
@@ -75,12 +75,13 @@ class SiderTwo extends Component{
     return (
     <Layout>
        <Header className="header">
-        <Space size={350}>
+        <Space size={330}>
         <div className="logo" />
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
           <Menu.Item key="1"><Link to="/SiderDemo">page 1</Link></Menu.Item>
           <Menu.Item key="2"><Link to="/SiderTwo">page 2</Link></Menu.Item>
-          <Menu.Item key="3">page 3</Menu.Item>
+          <Menu.Item key="3"><Link to="/SiderThree">page 3</Link></Menu.Item>
+          <Menu.Item key="4">page 4</Menu.Item>
         </Menu>
        <Button type="primary">用户</Button>
         </Space>
@@ -93,7 +94,7 @@ class SiderTwo extends Component{
             defaultOpenKeys={['sub1']}
             style={{ height: '100%', borderRight: 0 }}
           >
-            <SubMenu key="sub1" icon={<UserOutlined />} title="日程">
+            <SubMenu key="sub1" icon={<ScheduleOutlined />} title="Schedule">
             <MyList data={data2}/> 
             </SubMenu>
           </Menu>
@@ -214,17 +215,18 @@ class SiderTwo extends Component{
         <Sider width={150} className="Quick-functions">
         <Menu
             mode="inline"
-            defaultSelectedKeys={['2']}
-            defaultOpenKeys={['sub2']}
+            defaultSelectedKeys={['1']}
+            defaultOpenKeys={['sub1']}
             style={{ height: '100%', borderRight: 0 }}
           >
-            <Menu.Item key="1">任务</Menu.Item>
+            <SubMenu key="sub1" icon={<CarryOutOutlined />} title="Task">
             <MyList data={data1}/> 
             <div align='right'>
               <Tooltip title='Click twice'>
             <Button type='primary' shape="circle"><Link to="/SiderTwoCopy">+</Link></Button>
               </Tooltip>
             </div>
+            </SubMenu>
           </Menu>
           </Sider>
         </Layout>

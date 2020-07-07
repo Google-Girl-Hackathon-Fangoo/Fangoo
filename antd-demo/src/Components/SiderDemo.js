@@ -4,7 +4,7 @@ import './SiderDemo.css';
 import SiderTwo from './SiderTwo.js';
 import { Link } from 'react-router-dom';
 import { Layout, Menu, Breadcrumb,Button,Space,Dropdown } from 'antd';
-import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
+import { UserOutlined, TeamOutlined } from '@ant-design/icons';
 import { DownOutlined } from '@ant-design/icons';
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
@@ -13,12 +13,13 @@ export default class SiderDemo extends Component{
     return (
     <Layout>
       <Header className="header">
-        <Space size={350}>
+        <Space size={330}>
         <div className="logo" />
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
           <Menu.Item key="1"><Link to="/SiderDemo">page 1</Link></Menu.Item>
           <Menu.Item key="2"><Link to="/SiderTwo">page 2</Link></Menu.Item>
-          <Menu.Item key="3">page 3</Menu.Item>
+          <Menu.Item key="3"><Link to="/SiderThree">page 3</Link></Menu.Item>
+          <Menu.Item key="4">page 4</Menu.Item>
         </Menu>
        <Button type="primary"><Link to="/SiderDemo/Mylogin">用户</Link></Button>
   
@@ -37,15 +38,8 @@ export default class SiderDemo extends Component{
             <SubMenu key="sub1" icon={<UserOutlined />} title="个人信息">
               <Menu.Item key="1"><Link to="/SiderTwo">日程</Link></Menu.Item>
               <Menu.Item key="2">近期使用情况</Menu.Item>
-              <Menu.Item key="3">option3</Menu.Item>
-              <Menu.Item key="4">option4</Menu.Item>
             </SubMenu>
-            <SubMenu key="sub2" icon={<LaptopOutlined />} title="小组合作">
-              <Menu.Item key="5">Group Name 1</Menu.Item>
-              <Menu.Item key="6">Group Name 2</Menu.Item>
-              <Menu.Item key="7">option7</Menu.Item>
-              <Menu.Item key="8">option8</Menu.Item>
-            </SubMenu>
+            <Menu.Item icon={<TeamOutlined />}><Link to="/SiderThree">小组合作</Link></Menu.Item>
           </Menu>
         </Sider>
         <Layout style={{ padding: '0 24px 24px' }}>
@@ -64,8 +58,9 @@ export default class SiderDemo extends Component{
               minHeight: 280,
             }}
           >
-            公告区
+            Notification
           </Content>
+        {/*
         <Sider width={150} className="Quick-functions">
         <Menu
             mode="inline"
@@ -83,6 +78,7 @@ export default class SiderDemo extends Component{
               <Menu.Item key="4">生成报表</Menu.Item>
           </Menu>
           </Sider>
+        */}
         </Layout>
       </Layout>
     </Layout>

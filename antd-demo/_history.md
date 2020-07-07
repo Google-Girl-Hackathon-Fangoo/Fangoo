@@ -64,7 +64,7 @@ It may be helpful to find the proper one in case we need to revert to the old ve
 
 #### 2020.07.07
 
-###### update1
+##### update1
 
 ​		Consideration of the main responsible part:
 
@@ -110,7 +110,7 @@ It may be helpful to find the proper one in case we need to revert to the old ve
 
 ​						选择完小组显示的内容进行切换
 
-​						Left Sider：群公告、群to-do、群task
+​						Left Sider：群公告、群schedule、群task
 
 ​						Contents：聊天界面（感觉好麻烦好麻烦好麻烦
 
@@ -139,3 +139,10 @@ It may be helpful to find the proper one in case we need to revert to the old ve
 ​												不知道要包含哪些内容
 
 ​												**整个page4待做**
+
+##### update2
+
+​		update several icons
+
+​		upload page3
+
