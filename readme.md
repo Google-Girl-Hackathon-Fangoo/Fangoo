@@ -39,6 +39,16 @@ API list
 
   ​		"data":{"email": xxx}
 
+- [x] sign in
+
+  ​	/sign_in/add
+
+  ​		"data":{"flockId": xxx, "beginTime": xxx, "endTime": xxx, "description": xxx}
+
+  ​	/sign_in/done
+
+  ​		"data":{"flockId": xxx, "username": xxx, "getTime": xxx}
+
 - [ ] calendar
 
 - [ ] task list

@@ -10,3 +10,16 @@ CREATE TABLE captcha(
   captcha VARCHAR(50),
   getTime DATETIME
 );
+
+CREATE TABLE signType(
+  flockId VARCHAR(50),
+  beginTime DATETIME,
+  endTime DATETIME,
+  description TEXT
+);
+
+CREATE TABLE signRecord(
+  flockId VARCHAR(50),
+  username VARCHAR(50),
+  getTime DATETIME
+);
