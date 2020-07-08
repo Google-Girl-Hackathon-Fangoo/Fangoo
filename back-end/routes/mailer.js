@@ -16,7 +16,7 @@ var transporter = nodemailer.createTransport({
 
 exports.send = function(object, code){
   var content = `您的验证码是 ${code}`
-  
+  console.log(`send mail to ${object}, with ${code}`)
   // setup email data
   var mail = {
     from: `"Fangoo" <${process.env.MAIL_FROM}>`,
