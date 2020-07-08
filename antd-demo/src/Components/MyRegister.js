@@ -218,8 +218,6 @@ const MyRegister= () => {
       >
         <Input.Password />
       </Form.Item>
-
-      {/*
       <Form.Item
         label="Captcha"
         extra="We must make sure that your are a human."
@@ -243,7 +241,7 @@ const MyRegister= () => {
             <Button>Get captcha</Button>
           </Col>
         </Row>
-      </Form.Item> */}
+      </Form.Item> 
 
       <Form.Item
         name="agreement"
