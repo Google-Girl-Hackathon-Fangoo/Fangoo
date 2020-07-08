@@ -187,3 +187,7 @@ It may be helpful to find the proper one in case we need to revert to the old ve
 ##### update6
 
 ​		update register
+
+##### update7
+
+​		update login with params sent by router
