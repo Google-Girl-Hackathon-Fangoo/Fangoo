@@ -1,5 +1,5 @@
 create table flock (
-  flockId int not null auto_increment primary key,
+  flockId int not null primary key,
   flockName text,
   adminName varchar(50),
   foreign key(adminName) references users(username)
