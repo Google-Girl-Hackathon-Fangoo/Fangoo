@@ -52,4 +52,32 @@ router.post('/delete', (req, res) => {
     res.json({ msg: 'success'})
 })
 
+router.post('/queryday', (req, res) => {
+    console.log(req.body)
+    data = req.body.data
+    console.log(data.username, data.date, data.type)
+    connection.query(
+      "SELECT * FROM task WHERE username = ? and deadline = ? and finish = ?", [data.username, data.date, data.type],
+      function(error, results, fields) {
+        if (error) res.json({msg: error})
+        console.log(results)
+        res.json(results)
+      }
+    )
+})
+
+router.post('/queryflock', (req, res) => {
+    console.log(req.body)
+    data = req.body.data
+    console.log(data.flockid, data.date)
+    connection.query(
+      "SELECT * FROM task WHERE flock_id = ? and deadline = ?", [data.flockid, data.date],
+      function(error, results, fields) {
+        if (error) res.json({msg: error})
+        console.log(results)
+        res.json(results)
+      }
+    )
+})
+
 module.exports = router
