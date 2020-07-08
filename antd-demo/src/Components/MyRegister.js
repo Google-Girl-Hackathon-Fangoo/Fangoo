@@ -140,12 +140,28 @@ const MyRegister= () => {
       form={form}
       name="register"
       onFinish={onFinish}
-      initialValues={{
-        residence: ["zhejiang", "hangzhou", "xihu"],
-        prefix: "86"
-      }}
       scrollToFirstError
     >
+      <Form.Item
+        name="username"
+        label={
+          <span>
+            Username&nbsp;
+            <Tooltip title="What do you want others to call you?">
+              <QuestionCircleOutlined />
+            </Tooltip>
+          </span>
+        }
+        rules={[
+          {
+            required: true,
+            message: "Please input your username!",
+            whitespace: true
+          }
+        ]}
+      >
+        <Input />
+      </Form.Item>
       <Form.Item
         name="email"
         label="E-mail"
@@ -203,59 +219,7 @@ const MyRegister= () => {
         <Input.Password />
       </Form.Item>
 
-      <Form.Item
-        name="nickname"
-        label={
-          <span>
-            Nickname&nbsp;
-            <Tooltip title="What do you want others to call you?">
-              <QuestionCircleOutlined />
-            </Tooltip>
-          </span>
-        }
-        rules={[
-          {
-            required: true,
-            message: "Please input your nickname!",
-            whitespace: true
-          }
-        ]}
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item
-        name="residence"
-        label="Habitual Residence"
-        rules={[
-          {
-            type: "array",
-            required: true,
-            message: "Please select your habitual residence!"
-          }
-        ]}
-      >
-        <Cascader options={residences} />
-      </Form.Item>
-
-      <Form.Item
-        name="phone"
-        label="Phone Number"
-        rules={[
-          {
-            required: true,
-            message: "Please input your phone number!"
-          }
-        ]}
-      >
-        <Input
-          addonBefore={prefixSelector}
-          style={{
-            width: "100%"
-          }}
-        />
-      </Form.Item>
-
+      {/*
       <Form.Item
         label="Captcha"
         extra="We must make sure that your are a human."
@@ -279,7 +243,7 @@ const MyRegister= () => {
             <Button>Get captcha</Button>
           </Col>
         </Row>
-      </Form.Item>
+      </Form.Item> */}
 
       <Form.Item
         name="agreement"

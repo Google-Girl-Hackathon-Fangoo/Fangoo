@@ -183,3 +183,7 @@ It may be helpful to find the proper one in case we need to revert to the old ve
 ##### update5
 
 ​		update page1 -- notification、send group notification
+
+##### update6
+
+​		update register

@@ -99,11 +99,21 @@ function onChange1(value, dateString) {
 function onOk1(value) {
   console.log('onOk: ', value);
 }
+
+var children=[];
+const getuser=axios.get("/users")
+    .then(res=>{
+      console.log(res);
+      children=res.data;
+      return res;
+    });
+var gg=getuser;
+/*
 const children = [];
 for (let i = 10; i < 36; i++) {
   children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
 }
-
+*/
 function handleChange(value) {
   console.log(`selected ${value}`);
 }
