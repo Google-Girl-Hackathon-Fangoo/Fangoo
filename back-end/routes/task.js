@@ -17,7 +17,7 @@ router.post('/insert', (req, res) => {
   data = req.body.data
   console.log(data.username, data.title, data.deadline, data.description)
   connection.query(
-    "insert into task(users_name, task_name, explain, deadline, finish) values(?, ?, ?, ?, 0)", [data.username, data.title, data.description, data.deadline],
+    "insert into task(usersName, taskName, explain, deadline, finish) values(?, ?, ?, ?, 0)", [data.username, data.title, data.description, data.deadline],
     function(error, results, fields) {
       if (error) res.json({msg: error})
     }
@@ -31,7 +31,7 @@ router.post('/update', (req, res) => {
     console.log(data.username, data.title)
     getTime = new Date()
     connection.query(
-      "update task set end_time = ?, finish = 1 where user_name = ? and title = ?", [getTime, data.username, data.title],
+      "update task set endTime = ?, finish = 1 where userName = ? and title = ?", [getTime, data.username, data.title],
       function(error, results, fields) {
         if (error) res.json({msg: error})
       }
@@ -44,7 +44,7 @@ router.post('/delete', (req, res) => {
     data = req.body.data
     console.log(data.username, data.title)
     connection.query(
-      "delete from task where user_name = ? and title = ?", [data.username, data.title],
+      "delete from task where userName = ? and title = ?", [data.username, data.title],
       function(error, results, fields) {
         if (error) res.json({msg: error})
       }
@@ -71,7 +71,7 @@ router.post('/queryflock', (req, res) => {
     data = req.body.data
     console.log(data.flockid, data.date)
     connection.query(
-      "SELECT * FROM task WHERE flock_id = ? and deadline = ?", [data.flockid, data.date],
+      "SELECT * FROM task WHERE flockId = ? and deadline = ?", [data.flockid, data.date],
       function(error, results, fields) {
         if (error) res.json({msg: error})
         console.log(results)
