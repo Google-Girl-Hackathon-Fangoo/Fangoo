@@ -12,6 +12,7 @@ import MyRegister from './Components/MyRegister.js';
 import * as serviceWorker from './serviceWorker';
 import SiderTwo from './Components/SiderTwo';
 import SiderTwoCopy from './Components/SiderTwoCopy';
+import SiderThree from './Components/SiderThree';
 const hashHistory = createHashHistory();
 
 render((

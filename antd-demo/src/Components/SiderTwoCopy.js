@@ -1,8 +1,8 @@
 import React,{ Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Form, Layout, Menu, Button, Space, Tooltip, Drawer, Select, message } from 'antd';
-import {Row,Col,Input,DatePicker} from 'antd';
-import { UserOutlined } from '@ant-design/icons';
+import {Row,Col,Input,DatePicker,Checkbox} from 'antd';
+import { ScheduleOutlined, CarryOutOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
 import './SiderTwoCopy.css';
 import SiderDemo from './SiderDemo.js';
@@ -22,6 +22,14 @@ const data1 = [
 const data2 = [
   '今日?/总日程1',
   '今日?/总日程2',
+];
+function onChange(checkedValues) {
+  console.log('checked = ', checkedValues);
+}
+const options = [
+  { label: 'Apple', value: 'Apple' },
+  { label: 'Pear', value: 'Pear' },
+  { label: 'Orange', value: 'Orange' },
 ];
 class ChooseForm extends Component{
   constructor(props){
@@ -68,12 +76,13 @@ class SiderTwoCopy extends Component{
     return (
     <Layout>
        <Header className="header">
-        <Space size={350}>
+        <Space size={330}>
         <div className="logo" />
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
           <Menu.Item key="1"><Link to="/SiderDemo">page 1</Link></Menu.Item>
           <Menu.Item key="2"><Link to="/SiderTwo">page 2</Link></Menu.Item>
           <Menu.Item key="3">page 3</Menu.Item>
+          <Menu.Item key="4">page 4</Menu.Item>
         </Menu>
        <Button type="primary">用户</Button>
         </Space>
@@ -86,7 +95,7 @@ class SiderTwoCopy extends Component{
             defaultOpenKeys={['sub1']}
             style={{ height: '100%', borderRight: 0 }}
           >
-            <SubMenu key="sub1" icon={<UserOutlined />} title="日程">
+            <SubMenu key="sub1" icon={<ScheduleOutlined />} title="Schedule">
             <MyList data={data2}/> 
             </SubMenu>
           </Menu>
@@ -213,15 +222,17 @@ class SiderTwoCopy extends Component{
         <Sider width={150} className="Quick-functions">
         <Menu
             mode="inline"
-            defaultSelectedKeys={['2']}
-            defaultOpenKeys={['sub2']}
+            defaultSelectedKeys={['1']}
+            defaultOpenKeys={['sub1']}
             style={{ height: '100%', borderRight: 0 }}
           >
-            <Menu.Item key="1">任务</Menu.Item>
-            <MyList data={data1}/> 
+            <SubMenu key="sub1" icon={<CarryOutOutlined />} title="Task">
+            {/*<MyList data={data1}/>  */}
+            <Checkbox.Group options={options} /*defaultValue={['Pear']}*/ onChange={onChange} />
             <div align='right'>
             <Button type='primary' shape="circle" onClick={this.showDrawer}>+</Button>
             </div>
+            </SubMenu>
           </Menu>
           </Sider>
         </Layout>
