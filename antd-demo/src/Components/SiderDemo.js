@@ -3,11 +3,12 @@ import 'antd/dist/antd.css';
 import './SiderDemo.css';
 import SiderTwo from './SiderTwo.js';
 import { Link } from 'react-router-dom';
-import { Modal,Cascader, Row, Layout, Menu, Breadcrumb,Button,Space,Dropdown } from 'antd';
+import { Form,DatePicker,Col,Input,Select,message,Modal,Cascader, Row, Layout, Menu, Breadcrumb,Button,Space,Dropdown } from 'antd';
 import { UserOutlined, TeamOutlined,UsergroupAddOutlined, ScheduleOutlined, CarryOutOutlined, NotificationOutlined } from '@ant-design/icons';
 import { DownOutlined } from '@ant-design/icons';
 import MyList from './MyList.js';
 import axios from 'axios';
+const { Option } = Select;
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 const data1 = [
@@ -73,28 +74,93 @@ class LazyOptions extends React.Component {
       )
   }
 };
+
+function onChange(checkedValues) {
+  console.log('checked = ', checkedValues);
+}
+const { RangePicker } = DatePicker;
+
+function onChange1(value, dateString) {
+  console.log('Selected Time: ', value);
+  console.log('Formatted Selected Time: ', dateString);
+}
+
+function onOk1(value) {
+  console.log('onOk: ', value);
+}
 export default class SiderDemo extends Component{
-  state = { visible: false };
-  showModal = () => {
+  state = { visible1: false,visible2: false,visible3:false };
+  showModal1 = () => {
     this.setState({
-      visible: true,
+      visible1: true,
     });
   };
 
-  handleOk = e => {
+  handleOk1 = e => {
     console.log(e);
     this.setState({
-      visible: false,
+      visible1: false,
     });
   };
 
-  handleCancel = e => {
+  handleCancel1 = e => {
     console.log(e);
     this.setState({
-      visible: false,
+      visible1: false,
+    });
+  };
+  showModal2 = () => {
+    this.setState({
+      visible2: true,
+    });
+  };
+
+  handleOk2 = e => {
+    console.log(e);
+    this.setState({
+      visible2: false,
+    });
+  };
+
+  handleCancel2 = e => {
+    console.log(e);
+    this.setState({
+      visible2: false,
+    });
+  };
+  showModal3 = () => {
+    this.setState({
+      visible3: true,
+    });
+  };
+
+  handleOk3 = e => {
+    console.log(e);
+    this.setState({
+      visible3: false,
+    });
+  };
+
+  handleCancel3 = e => {
+    console.log(e);
+    this.setState({
+      visible3: false,
     });
   };
   render(){
+    const onFinish1 = (values) => {
+      console.log(values)
+      axios.post("/users/sign-in",{
+        data: values
+      }).then((response)=>{
+        console.log(response.data)
+        if (response.data.msg === 'success'){
+          message.success('Create Succed!')
+        }else{
+          message.warn('Create Failed')
+        }
+      })
+    }
     return (
     <Layout>
       <Header className="header">
@@ -124,15 +190,15 @@ export default class SiderDemo extends Component{
               <Menu.Item key="1"><Link to="/SiderTwo">日程</Link></Menu.Item>
               <Menu.Item key="2">近期使用情况</Menu.Item>
               <div align='middle'>
-              <Button type='text' onClick={this.showModal}>
+              <Button type='text' onClick={this.showModal1}>
                 Notification
               </Button>
               </div>
               <Modal
-                 title="Basic Modal"
-                 visible={this.state.visible}
-                 onOk={this.handleOk}
-                 onCancel={this.handleCancel}
+                 title="Notification"
+                 visible={this.state.visible1}
+                 onOk={this.handleOk1}
+                 onCancel={this.handleCancel1}
               >
               <Menu
             mode="inline"
@@ -206,7 +272,79 @@ export default class SiderDemo extends Component{
                 <Menu.Item key="5">添加好友</Menu.Item>
                 <Menu.Item key="6">添加小组</Menu.Item>
                 </SubMenu>
-                <Button type='text'>群签到</Button>
+
+              <div align='left'>
+              <Button type='text' onClick={this.showModal2}>
+                群签到
+              </Button>
+              </div>
+              <Modal
+                 title="群签到"
+                 visible={this.state.visible2}
+                 onOk={this.handleOk2}
+                 onCancel={this.handleCancel2}
+              >
+                <Row>
+                <div align='right'>
+                <Button onClick={this.showModal3}>发起签到</Button>
+                </div>
+                </Row>
+                <Modal
+                 title="发起群签到"
+                 visible={this.state.visible3}
+                 onOk={this.handleOk3}
+                 onCancel={this.handleCancel3}
+                >
+                <Form layout="vertical" hideRequiredMark  onFinish={onFinish1}>
+                  <Row gutter={16}>
+                    <Col span={12}>
+                      <Form.Item
+                        name="Time"
+                        label="Time"
+                        rules={[{ required: true, message: 'Please choose the Time' }]}
+                      >
+                        <RangePicker
+                          showTime={{ format: 'HH:mm' }}
+                          format="YYYY-MM-DD HH:mm"
+                          onChange={onChange1}
+                          onOk={onOk1}
+                        />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Row gutter={16}>
+                    <Col span={24}>
+                      <Form.Item
+                        name="description"
+                        label="Description"
+                        rules={[
+                          {
+                            required: true,
+                            message: 'please enter description',
+                          },
+                        ]}
+                      >
+                        <Input.TextArea rows={4} placeholder="please enter description" />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Form.Item>
+                        <Button onClick={this.onClose} style={{ marginRight: 8 }}>
+                            Cancel
+                          </Button>
+                        <Button htmlType='submit' onClick={this.onClose} type="primary" >
+                            Submit
+                        </Button>
+                  </Form.Item>
+                  </Form>
+                </Modal>
+              <Row>
+              签到1<Button>确认签到</Button>
+              </Row>
+              
+              </Modal>
+
+                
                 <Button type='text' onClick={this.showDrawer}>安排群会议</Button>
                 <Button type='text'>增加群任务</Button>
                 <Button type='text'>生成群报表</Button>

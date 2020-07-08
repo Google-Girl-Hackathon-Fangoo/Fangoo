@@ -167,3 +167,7 @@ It may be helpful to find the proper one in case we need to revert to the old ve
 ​		next  function：签到、会议、任务
 
 ​		waiting to solve：报表，chat-box，load of data
+
+##### update2
+
+​		update simple sign-in
