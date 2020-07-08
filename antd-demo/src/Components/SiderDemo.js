@@ -89,7 +89,8 @@ function onOk1(value) {
   console.log('onOk: ', value);
 }
 export default class SiderDemo extends Component{
-  state = { visible1: false,visible2: false,visible3:false };
+  state = { visible1: false,visible2: false,
+    visible3:false,visible4:false,visible5:false };
   showModal1 = () => {
     this.setState({
       visible1: true,
@@ -147,10 +148,74 @@ export default class SiderDemo extends Component{
       visible3: false,
     });
   };
+  showModal4 = () => {
+    this.setState({
+      visible4: true,
+    });
+  };
+
+  handleOk4 = e => {
+    console.log(e);
+    this.setState({
+      visible4: false,
+    });
+  };
+
+  handleCancel4 = e => {
+    console.log(e);
+    this.setState({
+      visible4: false,
+    });
+  };
+  showModal5 = () => {
+    this.setState({
+      visible5: true,
+    });
+  };
+
+  handleOk5 = e => {
+    console.log(e);
+    this.setState({
+      visible5: false,
+    });
+  };
+
+  handleCancel5 = e => {
+    console.log(e);
+    this.setState({
+      visible5: false,
+    });
+  };
   render(){
     const onFinish1 = (values) => {
       console.log(values)
       axios.post("/users/sign-in",{
+        data: values
+      }).then((response)=>{
+        console.log(response.data)
+        if (response.data.msg === 'success'){
+          message.success('Create Succed!')
+        }else{
+          message.warn('Create Failed')
+        }
+      })
+    }
+    const onFinish2 = (values) => {
+      console.log(values)
+      axios.post("/users/schedule",{
+        data: values
+      }).then((response)=>{
+        console.log(response.data)
+        if (response.data.msg === 'success'){
+          message.success('Create Succed!')
+        }else{
+          message.warn('Create Failed')
+        }
+      })
+    }
+    const onFinish3 = (values) => {
+      console.log(values)
+      axios.post("/users/task",{
         data: values
       }).then((response)=>{
         console.log(response.data)
@@ -344,9 +409,162 @@ export default class SiderDemo extends Component{
               
               </Modal>
 
-                
-                <Button type='text' onClick={this.showDrawer}>安排群会议</Button>
-                <Button type='text'>增加群任务</Button>
+                <Button type='text' onClick={this.showModal4}>安排群会议</Button>
+                <Modal
+                 title="安排群会议"
+                 visible={this.state.visible4}
+                 onOk={this.handleOk4}
+                 onCancel={this.handleCancel4}
+                >
+                <Form layout="vertical" hideRequiredMark  onFinish={onFinish2}>
+                  <Row gutter={16}>
+                    <Col span={12}>
+                      <Form.Item
+                          name="name"
+                          label="Name"
+                        rules={[{ required: true, message: 'Please enter user name' }]}
+                      >
+                        <Input placeholder="Please enter user name" />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col span={12}>
+                      <Form.Item
+                        name="type"
+                        label="Type"
+                        rules={[{ required: true, message: 'Please choose the type' }]}
+                      >
+                        <Select placeholder="Please choose the type" defaultValue='group'>
+                          <Option value="group">Group</Option>
+                        </Select>
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Row gutter={16}>
+                    <Col span={12}>
+                      <Form.Item
+                        name="cooperator"
+                        label="Cooperator"
+                        rules={[{ required: true, message: 'Please choose the approver' }]}
+                      >
+                        <Select placeholder="Please choose the approver">
+                          <Option value="jack">Jack Ma</Option>
+                          <Option value="tom">Tom Liu</Option>
+                        </Select>
+                      </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                      <Form.Item
+                        name="dateTime"
+                        label="DateTime"
+                        rules={[{ required: true, message: 'Please choose the dateTime' }]}
+                      >
+                        <DatePicker.RangePicker
+                          style={{ width: '100%' }}
+                          getPopupContainer={trigger => trigger.parentNode}
+                        />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Row gutter={16}>
+                    <Col span={24}>
+                      <Form.Item
+                        name="description"
+                        label="Description"
+                        rules={[
+                          {
+                            required: true,
+                            message: 'please enter description',
+                          },
+                        ]}
+                      >
+                        <Input.TextArea rows={4} placeholder="please enter description" />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Form.Item>
+                        <Button onClick={this.onClose} style={{ marginRight: 8 }}>
+                            Cancel
+                          </Button>
+                        <Button htmlType='submit' onClick={this.onClose} type="primary" >
+                            Submit
+                        </Button>
+                  </Form.Item>
+                  </Form>
+                </Modal>
+                <Button type='text' onClick={this.showModal5}>增加群任务</Button>
+                <Modal
+                 title="安排群任务"
+                 visible={this.state.visible5}
+                 onOk={this.handleOk5}
+                 onCancel={this.handleCancel5}
+                >
+                <Form layout="vertical" hideRequiredMark onFinish={onFinish3}>
+                    <Row gutter={16}>
+                      <Col span={12}>
+                        <Form.Item
+                            name="title"
+                            label="Title"
+                          rules={[{ required: true, message: 'Please enter to-do title' }]}
+                        >
+                          <Input placeholder="Please enter to-do title" />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col span={12}>
+                        <Form.Item
+                          name="type"
+                          label="Type"
+                          rules={[{ required: true, message: 'Please choose the type' }]}
+                        >
+                          <Select placeholder="Please choose the type" defaultValue='group'>
+                            <Option value="group">Group</Option>
+                          </Select>
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={16}>
+                      <Col span={12}>
+                        <Form.Item
+                          name="deadline"
+                          label="DeadLine"
+                          rules={[{ required: true, message: 'Please choose the deadline' }]}
+                        >
+                          <DatePicker.RangePicker
+                            style={{ width: '100%' }}
+                            getPopupContainer={trigger => trigger.parentNode}
+                          />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={16}>
+                      <Col span={24}>
+                        <Form.Item
+                          name="description"
+                          label="Description"
+                          rules={[
+                            {
+                              required: true,
+                              message: 'please enter description',
+                            },
+                          ]}
+                        >
+                          <Input.TextArea rows={4} placeholder="please enter  description" />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                  <Form.Item>
+                        <Button onClick={this.onClose} style={{ marginRight: 8 }}>
+                          Cancel
+                        </Button>
+                        <Button htmlType='submit' onClick={this.onClose} type="primary">
+                          Submit
+                        </Button>
+                    </Form.Item>
+                  </Form>
+                </Modal>
                 <Button type='text'>生成群报表</Button>
             </Menu>
           </Sider>

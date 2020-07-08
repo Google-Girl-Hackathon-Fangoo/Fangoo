@@ -164,10 +164,14 @@ It may be helpful to find the proper one in case we need to revert to the old ve
 
 ​		need page optimization
 
-​		next  function：签到、会议、任务
+​		next  function：签到、会议、任务、Add
 
 ​		waiting to solve：报表，chat-box，load of data
 
 ##### update2
 
-​		update simple sign-in
+​		update page 1-- simple sign-in
+
+##### update3
+
+​		update page 1-- group schedule+task
