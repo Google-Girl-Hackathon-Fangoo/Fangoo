@@ -3,8 +3,8 @@ import 'antd/dist/antd.css';
 import './SiderDemo.css';
 import SiderTwo from './SiderTwo.js';
 import { Link } from 'react-router-dom';
-import { Form,DatePicker,Col,Input,Select,message,Modal,Cascader, Row, Layout, Menu, Breadcrumb,Button,Space,Dropdown } from 'antd';
-import { UserOutlined, TeamOutlined,UsergroupAddOutlined, ScheduleOutlined, CarryOutOutlined, NotificationOutlined } from '@ant-design/icons';
+import { Checkbox,Form,DatePicker,Col,Input,Select,message,Modal,Cascader, Row, Layout, Menu, Breadcrumb,Button,Space,Dropdown } from 'antd';
+import { LockOutlined,UserOutlined, TeamOutlined,UsergroupAddOutlined, ScheduleOutlined, CarryOutOutlined, NotificationOutlined } from '@ant-design/icons';
 import { DownOutlined } from '@ant-design/icons';
 import MyList from './MyList.js';
 import axios from 'axios';
@@ -100,6 +100,8 @@ function onOk1(value) {
   console.log('onOk: ', value);
 }
 
+var user_name="user1";
+/*
 var children=[];
 const getuser=axios.get("/users")
     .then(res=>{
@@ -108,19 +110,37 @@ const getuser=axios.get("/users")
       return res;
     });
 var gg=getuser;
-/*
+*/
 const children = [];
 for (let i = 10; i < 36; i++) {
   children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
 }
-*/
 function handleChange(value) {
   console.log(`selected ${value}`);
 }
 export default class SiderDemo extends Component{
-  state = { visible1: false,visible2: false,
+  state = { visible: false,visible1: false,visible2: false,
     visible3:false,visible4:false,visible5:false,
     visible6:false,visible7:false,visible8:false };
+    showModal = () => {
+      this.setState({
+        visible: true,
+      });
+    };
+  
+    handleOk = e => {
+      console.log(e);
+      this.setState({
+        visible: false,
+      });
+    };
+  
+    handleCancel = e => {
+      console.log(e);
+      this.setState({
+        visible: false,
+      });
+    };
   showModal1 = () => {
     this.setState({
       visible1: true,
@@ -272,6 +292,20 @@ export default class SiderDemo extends Component{
     });
   };
   render(){
+    const onFinish = (values) => {
+      console.log(values)
+      axios.post("/users/login",{
+        data: values
+      }).then((response)=>{
+        console.log(response.data)
+        if (response.data.msg === 'success'){
+          user_name=values.name;
+          message.success('Login Succed!')
+        }else{
+          message.warn('Login Failed')
+        }
+      })
+    }
     const onFinish1 = (values) => {
       console.log(values)
       axios.post("/users/sign-in",{
@@ -344,12 +378,71 @@ export default class SiderDemo extends Component{
         <div className="logo" />
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
           <Menu.Item key="1"><Link to="/SiderDemo">page 1</Link></Menu.Item>
-          <Menu.Item key="2"><Link to="/SiderTwo">page 2</Link></Menu.Item>
+          <Menu.Item key="2"><Link to={"/SiderTwo"+"/"+user_name}>page 2</Link></Menu.Item>
           <Menu.Item key="3">page 3</Menu.Item>
           <Menu.Item key="4">page 4</Menu.Item>
         </Menu>
-       <Button type="primary"><Link to="/SiderDemo/Mylogin">用户</Link></Button>
-  
+       <Button type="primary" onClick={this.showModal}>{user_name}</Button>
+       <Modal
+            title="Log-in"
+            visible={this.state.visible}
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+        >
+        <Form
+            name="normal_login"
+            className="login-form"
+            initialValues={{
+              remember: true,
+            }}
+            onFinish={onFinish}
+          >
+            <Form.Item
+              name="username"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your Username!',
+                },
+              ]}
+            >
+              <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+            </Form.Item>
+            <Form.Item
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your Password!',
+                },
+              ]}
+            >
+              <Input
+                prefix={<LockOutlined className="site-form-item-icon" />}
+                type="password"
+                placeholder="Password"
+              />
+            </Form.Item>
+            <Form.Item>
+              <Form.Item name="remember" valuePropName="checked" noStyle>
+                <Checkbox>Remember me</Checkbox>
+              </Form.Item>
+
+              <a className="login-form-forgot" href="">
+                Forgot password
+              </a>
+            </Form.Item>
+
+            <Form.Item>
+              <Space size='large'>
+              <Button type="primary" htmlType="submit" className="login-form-button">
+                Log in
+              </Button>
+              <Button><Link to="/MyRegister">register now!</Link></Button>
+              </Space>
+            </Form.Item>
+          </Form>
+        </Modal>
        </Space>
      
       
@@ -363,7 +456,7 @@ export default class SiderDemo extends Component{
             style={{ height: '100%', borderRight: 0 }}
           >
             <SubMenu key="sub1" icon={<UserOutlined />} title="个人信息">
-              <Menu.Item key="1"><Link to="/SiderTwo">日程</Link></Menu.Item>
+              <Menu.Item key="1"><Link to={"/SiderTwo"+"/"+user_name}>日程</Link></Menu.Item>
               <Menu.Item key="2">近期使用情况</Menu.Item>
               <div align='middle'>
               <Button type='text' onClick={this.showModal1}>

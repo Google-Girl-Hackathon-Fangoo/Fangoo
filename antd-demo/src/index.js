@@ -21,8 +21,8 @@ render((
         <Route path="/SiderDemo" component={SiderDemo}/>
         <Route path="/SiderDemo/Mylogin" component={Mylogin}/>
         <Route path="/MyRegister" component={MyRegister}/>
-        <Route path="/SiderTwo" component={SiderTwo}/>
-        <Route path="/SiderTwoCopy" component={SiderTwoCopy}/>
+        <Route path="/SiderTwo/:name" component={SiderTwo}/>
+        <Route path="/SiderTwoCopy/:name" component={SiderTwoCopy}/>
     </Router>
 ), document.body);
 //), document.getElementById('root'));
