@@ -89,7 +89,7 @@ class SiderTwo extends Component{
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
           <Menu.Item key="1"><Link to="/SiderDemo">page 1</Link></Menu.Item>
           <Menu.Item key="2"><Link to="/SiderTwo">page 2</Link></Menu.Item>
-          <Menu.Item key="3"><Link to="/SiderThree">page 3</Link></Menu.Item>
+          <Menu.Item key="3">page 3</Menu.Item>
           <Menu.Item key="4">page 4</Menu.Item>
         </Menu>
        <Button type="primary">用户</Button>

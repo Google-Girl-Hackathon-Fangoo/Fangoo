@@ -153,3 +153,17 @@ It may be helpful to find the proper one in case we need to revert to the old ve
 ##### update4
 
 ​		add page3 group-schedule
+
+#### 2020.07.08
+
+##### update1
+
+​		update page layout 
+
+​		finish notification
+
+​		need page optimization
+
+​		next  function：签到、会议、任务
+
+​		waiting to solve：报表，chat-box，load of data
