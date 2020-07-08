@@ -179,3 +179,7 @@ It may be helpful to find the proper one in case we need to revert to the old ve
 ##### update4
 
 ​		update page1 -- add group
+
+##### update5
+
+​		update page1 -- notification、send group notification

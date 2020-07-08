@@ -17,8 +17,19 @@ const data1 = [
 const data2 = [
   'Group Schedule',
 ];
+const data21 = [
+  'Personal Schedule',
+];
 const data3 = [
   'Group Task',
+];
+const data31 = [
+  'Personal Task',
+];
+const data4=[
+  'Notification1',
+  'Notification2',
+  'Notification3',
 ];
 const options = [
   {
@@ -98,7 +109,8 @@ function handleChange(value) {
 }
 export default class SiderDemo extends Component{
   state = { visible1: false,visible2: false,
-    visible3:false,visible4:false,visible5:false };
+    visible3:false,visible4:false,visible5:false,
+    visible6:false,visible7:false,visible8:false };
   showModal1 = () => {
     this.setState({
       visible1: true,
@@ -213,6 +225,42 @@ export default class SiderDemo extends Component{
       visible6: false,
     });
   };
+  showModal7 = () => {
+    this.setState({
+      visible7: true,
+    });
+  };
+
+  handleOk7 = e => {
+    console.log(e);
+    this.setState({
+      visible7: false,
+    });
+  };
+
+  handleCancel7 = e => {
+    console.log(e);
+    this.setState({
+      visible7: false,
+    });
+  };
+  showModal8 = () => {
+    this.setState({
+      visible8: true,
+    });
+  };
+  handleOk8 = e => {
+    console.log(e);
+    this.setState({
+      visible8: false,
+    });
+  };
+  handleCancel8 = e => {
+    console.log(e);
+    this.setState({
+      visible8: false,
+    });
+  };
   render(){
     const onFinish1 = (values) => {
       console.log(values)
@@ -256,6 +304,19 @@ export default class SiderDemo extends Component{
     const onFinish4 = (values) => {
       console.log(values)
       axios.post("/users/addgroup",{
+        data: values
+      }).then((response)=>{
+        console.log(response.data)
+        if (response.data.msg === 'success'){
+          message.success('Create Succed!')
+        }else{
+          message.warn('Create Failed')
+        }
+      })
+    }
+    const onFinish5 = (values) => {
+      console.log(values)
+      axios.post("/users/notification",{
         data: values
       }).then((response)=>{
         console.log(response.data)
@@ -314,11 +375,21 @@ export default class SiderDemo extends Component{
               <SubMenu key="sub1" icon={<NotificationOutlined />} title="Group Notification">
                   <MyList data={data1}/> 
               </SubMenu>
-              <SubMenu key="sub2" icon={<ScheduleOutlined />} title="Group Schedule">
-                  <MyList data={data2}/> 
+              <SubMenu key="sub2" icon={<ScheduleOutlined />} title="Schedule">
+                <Row>
+                  <MyList data={data2}/>
+                </Row>
+                <Row>
+                  <MyList data={data21}/>
+                  </Row> 
               </SubMenu>
-              <SubMenu key="sub3" icon={<CarryOutOutlined />} title="Group Task">
-                  <MyList data={data3}/> 
+              <SubMenu key="sub3" icon={<CarryOutOutlined />} title="Task">
+              <Row>
+                  <MyList data={data3}/>
+                </Row>
+                <Row>
+                  <MyList data={data31}/>
+                  </Row> 
               </SubMenu>
                 </Menu>
               </Modal>
@@ -479,7 +550,61 @@ export default class SiderDemo extends Component{
               </Row>
               
               </Modal>
-
+                <Button type='text' onClick={this.showModal7}>群公告</Button>
+                
+                <Modal
+                 title="群公告"
+                 visible={this.state.visible7}
+                 onOk={this.handleOk7}
+                 onCancel={this.handleCancel7}
+              >
+                <Row>
+                <div align='right'>
+                <Button onClick={this.showModal8}>发布群公告</Button>
+                </div>
+                </Row>
+                <Modal
+                 title="发布群公告"
+                 visible={this.state.visible8}
+                 onOk={this.handleOk8}
+                 onCancel={this.handleCancel8}
+                >
+                <Form layout="vertical" hideRequiredMark  onFinish={onFinish5}>
+                  <Row gutter={16}>
+                    <Col span={24}>
+                      <Form.Item
+                        name="notification"
+                        label="Notification"
+                        rules={[
+                          {
+                            required: true,
+                            message: 'please enter notification',
+                          },
+                        ]}
+                      >
+                        <Input.TextArea rows={4} placeholder="please enter notification" />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Form.Item>
+                        <Button onClick={this.onClose} style={{ marginRight: 8 }}>
+                            Cancel
+                          </Button>
+                        <Button htmlType='submit' onClick={this.onClose} type="primary" >
+                            Submit
+                        </Button>
+                  </Form.Item>
+                  </Form>
+                </Modal>
+              <Row>
+                Group Notifications:
+              </Row>
+              <Row>
+                <MyList data={data4}/> 
+              </Row>
+              
+              </Modal>
+                
                 <Button type='text' onClick={this.showModal4}>安排群会议</Button>
                 <Modal
                  title="安排群会议"
