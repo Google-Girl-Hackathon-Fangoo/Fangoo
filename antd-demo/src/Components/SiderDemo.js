@@ -88,6 +88,14 @@ function onChange1(value, dateString) {
 function onOk1(value) {
   console.log('onOk: ', value);
 }
+const children = [];
+for (let i = 10; i < 36; i++) {
+  children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
+}
+
+function handleChange(value) {
+  console.log(`selected ${value}`);
+}
 export default class SiderDemo extends Component{
   state = { visible1: false,visible2: false,
     visible3:false,visible4:false,visible5:false };
@@ -186,6 +194,25 @@ export default class SiderDemo extends Component{
       visible5: false,
     });
   };
+  showModal6 = () => {
+    this.setState({
+      visible6: true,
+    });
+  };
+
+  handleOk6 = e => {
+    console.log(e);
+    this.setState({
+      visible6: false,
+    });
+  };
+
+  handleCancel6 = e => {
+    console.log(e);
+    this.setState({
+      visible6: false,
+    });
+  };
   render(){
     const onFinish1 = (values) => {
       console.log(values)
@@ -216,6 +243,19 @@ export default class SiderDemo extends Component{
     const onFinish3 = (values) => {
       console.log(values)
       axios.post("/users/task",{
+        data: values
+      }).then((response)=>{
+        console.log(response.data)
+        if (response.data.msg === 'success'){
+          message.success('Create Succed!')
+        }else{
+          message.warn('Create Failed')
+        }
+      })
+    }
+    const onFinish4 = (values) => {
+      console.log(values)
+      axios.post("/users/addgroup",{
         data: values
       }).then((response)=>{
         console.log(response.data)
@@ -307,25 +347,6 @@ export default class SiderDemo extends Component{
           >
           Chat Box
           </Content>
-          {/*
-        <Sider width={150} className="Quick-functions">
-        <Menu
-            mode="inline"
-            defaultSelectedKeys={['1']}
-            defaultOpenKeys={['sub1']}
-            style={{ height: '100%', borderRight: 0 }}
-          >
-        <SubMenu key="sub1" icon={<UserOutlined />} title="Add">
-              <Menu.Item key="5">添加好友</Menu.Item>
-              <Menu.Item key="6">添加小组</Menu.Item>
-        </SubMenu>
-             <Menu.Item key="1">签到</Menu.Item>
-              <Menu.Item key="2">安排会议</Menu.Item>
-              <Menu.Item key="3">增加任务</Menu.Item>
-              <Menu.Item key="4">生成报表</Menu.Item>
-          </Menu>
-          </Sider>
-          */}
         <Sider width={150} className="Quick-functions">
           <Menu
               mode="inline"
@@ -334,8 +355,58 @@ export default class SiderDemo extends Component{
               style={{ height: '100%', borderRight: 0 }}
             >
                 <SubMenu key="sub1" icon={<UsergroupAddOutlined />} title="Add">
-                <Menu.Item key="5">添加好友</Menu.Item>
-                <Menu.Item key="6">添加小组</Menu.Item>
+                <div align='middle'>
+                <Button type='text'>添加好友</Button>
+                <Button type='text' onClick={this.showModal6}>添加群</Button>
+                <Modal
+                 title="添加群"
+                 visible={this.state.visible6}
+                 onOk={this.handleOk6}
+                 onCancel={this.handleCancel6}
+                >
+                <Form layout="vertical" hideRequiredMark onFinish={onFinish4}>
+                  <Row gutter={16}>
+                      <Col span={12}>
+                        <Form.Item
+                            name="group name"
+                            label="Group Name"
+                          rules={[{ required: true, message: 'Please enter group name' }]}
+                        >
+                          <Input placeholder="Please enter group name" />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={16}>
+                      <Col span={12}>
+                        <Form.Item
+                          name="group member"
+                          label="Member Select"
+                          rules={[{ required: true, message: 'Please choose group member' }]}
+                        >
+                      <Select
+                        mode="multiple"
+                        style={{ width: '100%' }}
+                        placeholder="Please select"
+                        onChange={handleChange}
+                      >
+                      {children}
+                      </Select>
+                      </Form.Item>
+                      </Col>
+                    </Row >
+
+                  <Row>
+                        <Button onClick={this.onClose} style={{ marginRight: 8 }}>
+                          Cancel
+                        </Button>
+                        <Button htmlType='submit' onClick={this.onClose} type="primary">
+                          Submit
+                        </Button>
+                    </Row>
+                  
+                </Form>
+                </Modal>
+                </div>
                 </SubMenu>
 
               <div align='left'>
@@ -435,7 +506,7 @@ export default class SiderDemo extends Component{
                         label="Type"
                         rules={[{ required: true, message: 'Please choose the type' }]}
                       >
-                        <Select placeholder="Please choose the type" defaultValue='group'>
+                        <Select placeholder="Please choose the type">
                           <Option value="group">Group</Option>
                         </Select>
                       </Form.Item>
@@ -519,7 +590,7 @@ export default class SiderDemo extends Component{
                           label="Type"
                           rules={[{ required: true, message: 'Please choose the type' }]}
                         >
-                          <Select placeholder="Please choose the type" defaultValue='group'>
+                          <Select placeholder="Please choose the type">
                             <Option value="group">Group</Option>
                           </Select>
                         </Form.Item>
