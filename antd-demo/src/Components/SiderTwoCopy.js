@@ -47,6 +47,15 @@ class ChooseForm extends Component{
   
 }
 class SiderTwoCopy extends Component{
+  constructor(props){
+    super(props);
+    this.user_name="NULL";
+  };
+  componentWillMount(){
+    console.log(this.props);
+    this.user_name=this.props.match.params.name;
+    console.log(this.props.match.params.name);
+  }
   state = { visible: false,type: true};
   showDrawer=() =>{
     this.setState({
@@ -80,11 +89,11 @@ class SiderTwoCopy extends Component{
         <div className="logo" />
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
           <Menu.Item key="1"><Link to="/SiderDemo">page 1</Link></Menu.Item>
-          <Menu.Item key="2"><Link to="/SiderTwo">page 2</Link></Menu.Item>
+          <Menu.Item key="2"><Link to={"/SiderTwo"+"/"+this.user_name}>page 2</Link></Menu.Item>
           <Menu.Item key="3">page 3</Menu.Item>
           <Menu.Item key="4">page 4</Menu.Item>
         </Menu>
-       <Button type="primary">用户</Button>
+       <Button type="primary">{this.user_name}</Button>
         </Space>
       </Header>
       <Layout>
@@ -120,7 +129,7 @@ class SiderTwoCopy extends Component{
             <MyCalendar/>
             <div align='right'>
             <Tooltip title='Click twice'>
-            <Button type="primary" shape="circle"><Link to='/SiderTwo'>+</Link></Button>
+            <Button type="primary" shape="circle"><Link to={"/SiderTwo"+"/"+this.user_name}>+</Link></Button>
             </Tooltip>
             </div>
             <Drawer

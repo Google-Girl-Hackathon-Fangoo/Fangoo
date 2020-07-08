@@ -19,40 +19,6 @@ import { QuestionCircleOutlined } from "@ant-design/icons";
 import axios from 'axios';
 const { Option } = Select;
 const AutoCompleteOption = AutoComplete.Option;
-const residences = [
-  {
-    value: "zhejiang",
-    label: "Zhejiang",
-    children: [
-      {
-        value: "hangzhou",
-        label: "Hangzhou",
-        children: [
-          {
-            value: "xihu",
-            label: "West Lake"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    value: "jiangsu",
-    label: "Jiangsu",
-    children: [
-      {
-        value: "nanjing",
-        label: "Nanjing",
-        children: [
-          {
-            value: "zhonghuamen",
-            label: "Zhong Hua Men"
-          }
-        ]
-      }
-    ]
-  }
-];
 const formItemLayout = {
   labelCol: {
     xs: {
@@ -192,7 +158,6 @@ const MyRegister= () => {
       >
         <Input.Password />
       </Form.Item>
-
       <Form.Item
         name="confirm"
         label="Confirm Password"
