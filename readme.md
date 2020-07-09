@@ -65,3 +65,12 @@ API list
     /users/addflock
 
     ​	"data": {"username": xxx, "title": xxx}
+
+
+
+https://blog.csdn.net/weixin_33774615/article/details/91368524 React组件调用顺序constructor -> willMount -> render -> DidMount
+
+出现之前数据刷不出来的原因是render比willMount、constructor先执行完毕（React组件的执行看起来是并行的），所以需要加一个isLoading变量来控制，具体可以参考这篇https://blog.csdn.net/weixin_30588729/article/details/98212617
+
+关于页面不能refresh的问题，或许是需要再额外建一个文件把link to的跳转改为前端的route路由，但似乎改起来不是那么简单，之后再说吧
+
