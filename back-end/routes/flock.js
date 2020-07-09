@@ -51,27 +51,47 @@ router.post('/addflock', (req, res) => {
 router.post('/adduser', (req, res) => {
     console.log(req.body)
     data = req.body.data
-    console.log(data.username, data.flockid)
+    console.log(data.username, data.searchid, data.flockid)
     connection.query(
-      "insert into flockUser values(?, ?, 0)", [data.username, data.flockid],
+      "select authorityType from flockUser where flockId = ? and usersName = ?", [data.flockid, data.username],
       function(error, results, fields) {
         if (error) res.json({msg: error})
+        else if (results[0] == undefined)
+          res.json({msg : 'failed because you are not admin'})
+        else {
+          connection.query(
+            "insert into flockUser values(?, ?, 0)", [data.searchid, data.flockid],
+            function(error, results, fields) {
+              if (error) res.json({msg: error})
+            }
+          )
+          res.json({ msg: 'success'})
+        }
       }
     )
-    res.json({ msg: 'success'})
-  })
+})
   
 router.post('/deluser', (req, res) => {
   console.log(req.body)
   data = req.body.data
-  console.log(data.username, data.flockid)
+  console.log(data.username, data.searchid, data.flockid)
   connection.query(
-    "delete from flockUser where usersName = ? and flockId = ?", [data.username, data.flockid],
+    "select authorityType from flockUser where flockId = ? and usersName = ?", [data.flockid, data.username],
     function(error, results, fields) {
       if (error) res.json({msg: error})
+      else if (results[0] == undefined)
+        res.json({msg : 'failed because you are not admin'})
+      else {
+        connection.query(
+            "delete from flockUser where usersName = ? and flockId = ?", [data.searchid, data.flockid],
+            function(error, results, fields) {
+            if (error) res.json({msg: error})
+          }
+        )
+        res.json({ msg: 'success'})
+      }
     }
   )
-  res.json({ msg: 'success'})
 })
 
 module.exports = router;
