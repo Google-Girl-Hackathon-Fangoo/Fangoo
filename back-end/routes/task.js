@@ -25,6 +25,19 @@ router.post('/insert', (req, res) => {
   res.json({ msg: 'success'})
 })
 
+router.post('/arrange', (req, res) => {
+  console.log(req.body)
+  data = req.body.data
+  console.log(data.username, data.title, data.date)
+  connection.query(
+    "update task set startTime = ? where userName = ? and title = ?", [data.date, data.username, data.title],
+    function(error, results, fields) {
+      if (error) res.json({msg: error})
+    }
+  )
+  res.json({ msg: 'success'})
+})
+
 router.post('/update', (req, res) => {
     console.log(req.body)
     data = req.body.data
