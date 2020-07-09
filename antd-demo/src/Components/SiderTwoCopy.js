@@ -172,7 +172,7 @@ class SiderTwoCopy extends Component{
         <div className="logo" />
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
           <Menu.Item key="1"><Link to="/SiderDemo">page 1</Link></Menu.Item>
-          <Menu.Item key="2"><Link to={"/SiderTwo"+"/"+this.user_name}>page 2</Link></Menu.Item>
+          <Menu.Item key="2"><Link to={{pathname:'/SiderTwo',query:{name:this.user_name,task:this.taskoptions,deltask:this.deltask}}}>page 2</Link></Menu.Item>
           <Menu.Item key="3">page 3</Menu.Item>
           <Menu.Item key="4">page 4</Menu.Item>
         </Menu>

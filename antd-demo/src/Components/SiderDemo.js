@@ -3,8 +3,9 @@ import 'antd/dist/antd.css';
 import './SiderDemo.css';
 import SiderTwo from './SiderTwo.js';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 import { Checkbox,Form,DatePicker,Col,Input,Select,message,Modal,Cascader, Row, Layout, Menu, Breadcrumb,Button,Space,Dropdown } from 'antd';
-import { LockOutlined,UserOutlined, TeamOutlined,UsergroupAddOutlined, ScheduleOutlined, CarryOutOutlined, NotificationOutlined } from '@ant-design/icons';
+import {LockOutlined,UserOutlined, TeamOutlined,UsergroupAddOutlined, ScheduleOutlined, CarryOutOutlined, NotificationOutlined } from '@ant-design/icons';
 import { DownOutlined } from '@ant-design/icons';
 import MyList from './MyList.js';
 import axios from 'axios';
@@ -415,16 +416,30 @@ export default class SiderDemo extends Component{
       })
     }
     const Onload1 = (values) => {
-      console.log(values)
+      //task=[];
+      //deltask=[];
       axios.post("/users/personaltask/queryday",
-        {data:{ username: user_name,date:"2020-07-09"}}
+        {data:{ username: user_name,date:moment().format('YYYY-MM-DD')}}
       ).then((response)=>{
         console.log(response.data)
         for (let item of response.data) {
           task.push(item.taskName);
           deltask.push(<Option value={item.taskName}>{item.taskName}</Option>);
         }
-        console.log(task);
+        /*
+        for (let item of response.data) {
+          var x=true;
+          for (let itemi of task){
+            if (itemi==item.taskName){
+              x=false;
+            }
+          }
+          if (x==true){
+            task.push(item.taskName);
+            deltask.push(<Option value={item.taskName}>{item.taskName}</Option>);
+          }
+        }
+        */
       })
     }
     return (
