@@ -347,8 +347,8 @@ export default class SiderDemo extends Component{
     }
     const onFinish4 = (values) => {
       console.log(values)
-      axios.post("/users/addgroup",{
-        data: values
+      axios.post("/users/addflock",{
+        data: {username:user_name,title:values.groupname}
       }).then((response)=>{
         console.log(response.data)
         if (response.data.msg === 'success'){
@@ -542,7 +542,7 @@ export default class SiderDemo extends Component{
                   <Row gutter={16}>
                       <Col span={12}>
                         <Form.Item
-                            name="group name"
+                            name="groupname"
                             label="Group Name"
                           rules={[{ required: true, message: 'Please enter group name' }]}
                         >
@@ -550,25 +550,6 @@ export default class SiderDemo extends Component{
                         </Form.Item>
                       </Col>
                     </Row>
-                    <Row gutter={16}>
-                      <Col span={12}>
-                        <Form.Item
-                          name="group member"
-                          label="Member Select"
-                          rules={[{ required: true, message: 'Please choose group member' }]}
-                        >
-                      <Select
-                        mode="multiple"
-                        style={{ width: '100%' }}
-                        placeholder="Please select"
-                        onChange={handleChange}
-                      >
-                      {children}
-                      </Select>
-                      </Form.Item>
-                      </Col>
-                    </Row >
-
                   <Row>
                         <Button onClick={this.onClose} style={{ marginRight: 8 }}>
                           Cancel
