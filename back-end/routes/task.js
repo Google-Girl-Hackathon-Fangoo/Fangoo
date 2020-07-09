@@ -81,7 +81,7 @@ router.post('/querydone', function(req, res){
 });
 
 // get tasks arranged on someday
-router.post('/queryday', function(req, res){
+router.post('/querydaily', function(req, res){
   console.log(req.body);
   data = req.body.data;
   console.log(data.username, data.date);
@@ -101,7 +101,7 @@ router.post('/queryday', function(req, res){
 });
 
 // get tasks almost missed on someday
-router.post('/querydaily', function(req, res){
+router.post('/queryday', function(req, res){
   console.log(req.body);
   data = req.body.data;
   console.log(data.username, data.date);

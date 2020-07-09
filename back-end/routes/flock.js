@@ -111,7 +111,7 @@ router.post('/quit', (req, res) => {
 });
 
 // give authority to some members
-router.post('/deluser', (req, res) => {
+router.post('/give', (req, res) => {
   console.log(req.body)
   data = req.body.data
   console.log(data.username, data.searchid, data.flockid)
@@ -134,8 +134,8 @@ router.post('/deluser', (req, res) => {
   )
 })
 
-// give authority to some members
-router.post('/deluser', (req, res) => {
+// drop authority of some members
+router.post('/drop', (req, res) => {
   console.log(req.body)
   data = req.body.data
   console.log(data.username, data.searchid, data.flockid)
@@ -147,16 +147,16 @@ router.post('/deluser', (req, res) => {
         res.json({msg : 'failed because you are not admin'})
       else {
         connection.query(
-          "update flockUser set authorityType = 1 where userName = ? and flockId = ?", [data.searchid, data.flockid],
-            function(error, results, fields) {
-              if (error) res.json({msg: error})
-            }
-          )
-          res.json({ msg: 'success'})
-        }
+          "update flockUser set authorityType = 0 where userName = ? and flockId = ?", [data.searchid, data.flockid],
+          function(error, results, fields) {
+            if (error) res.json({msg: error})
+          }
+        )
+        res.json({ msg: 'success'})
       }
-    )
-  })
+    }
+  )
+})
 
 module.exports = router;
 
