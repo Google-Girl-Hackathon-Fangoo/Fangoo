@@ -11,7 +11,7 @@ create table flockUser (
   authorityType int,
   foreign key(usersName) references users(username),
   foreign key(flockId) references flock(flockId),
-  primary key(flockId, flockUserId)
+  primary key(flockId, usersName)
 )
 
 create table task (
