@@ -23,6 +23,14 @@ const data2 = [
   '今日?/总日程1',
   '今日?/总日程2',
 ];
+function onChange2(value, dateString) {
+  console.log('Selected Time: ', value);
+  console.log('Formatted Selected Time: ', dateString);
+}
+
+function onOk2(value) {
+  console.log('onOk: ', value);
+}
 function onChange(checkedValues) {
   console.log('checked = ', checkedValues);
 }
@@ -189,10 +197,7 @@ class SiderTwoCopy extends Component{
                   label="DeadLine"
                   rules={[{ required: true, message: 'Please choose the deadline' }]}
                 >
-                  <DatePicker.RangePicker
-                    style={{ width: '100%' }}
-                    getPopupContainer={trigger => trigger.parentNode}
-                  />
+                   <DatePicker showTime onChange={onChange2} onOk={onOk2} />
                 </Form.Item>
               </Col>
             </Row>

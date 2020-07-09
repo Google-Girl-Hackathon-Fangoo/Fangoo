@@ -51,7 +51,7 @@ class LazyOptions extends React.Component {
   onChange = (value, selectedOptions) => {
     console.log(value, selectedOptions);
   };
-
+  
   loadData = selectedOptions => {
     const targetOption = selectedOptions[selectedOptions.length - 1];
     targetOption.loading = true;
@@ -89,6 +89,14 @@ class LazyOptions extends React.Component {
 function onChange(checkedValues) {
   console.log('checked = ', checkedValues);
 }
+function onChange2(value, dateString) {
+  console.log('Selected Time: ', value);
+  console.log('Formatted Selected Time: ', dateString);
+}
+
+function onOk2(value) {
+  console.log('onOk: ', value);
+}
 const { RangePicker } = DatePicker;
 
 function onChange1(value, dateString) {
@@ -110,6 +118,22 @@ const getuser=axios.get("/users")
     });
 var gg=getuser;
 */
+class get_sign_in extends Component{
+  constructor(props){
+    super(props);
+  };
+  render(){
+    var children=[];
+    const getuser=axios.get("/sign_in/done")
+        .then(res=>{
+          console.log(res);
+          children=res.data;
+        return res;
+    });
+    var gg=getuser;
+    return children;
+  }
+}
 const children = [];
 for (let i = 10; i < 36; i++) {
   children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
@@ -117,6 +141,7 @@ for (let i = 10; i < 36; i++) {
 function handleChange(value) {
   console.log(`selected ${value}`);
 }
+var selected_id=0;
 export default class SiderDemo extends Component{
   state = { visible: false,visible1: false,visible2: false,
     visible3:false,visible4:false,visible5:false,
@@ -291,6 +316,21 @@ export default class SiderDemo extends Component{
     });
   };
   render(){
+    const checkindone = (values) => {
+      console.log(values)
+      axios.post("/sign_in/done",{
+        data: {flockId:selected_id,username:user_name}
+      }).then((response)=>{
+        console.log(response.data)
+        if (response.data.msg === 'success'){
+          console.log(values.username);
+          user_name=values.username;
+          message.success('Sign-in Succed!')
+        }else{
+          message.warn('Sign-in Failed')
+        }
+      })
+    }
     const onFinish = (values) => {
       console.log(values)
       axios.post("/users/login",{
@@ -308,8 +348,9 @@ export default class SiderDemo extends Component{
     }
     const onFinish1 = (values) => {
       console.log(values)
-      axios.post("/users/sign-in",{
-        data: values
+      axios.post("/sign_in/add",{
+        data: {flockId:selected_id,beginTime:values.Time[0].format('YYYY-MM-DD HH:mm:ss'),
+          endTime:values.Time[1].format('YYYY-MM-DD HH:mm:ss'),description:values.description}
       }).then((response)=>{
         console.log(response.data)
         if (response.data.msg === 'success'){
@@ -649,7 +690,7 @@ export default class SiderDemo extends Component{
                   </Form>
                 </Modal>
               <Row>
-              签到1<Button>确认签到</Button>
+              签到1 <Button onClick={checkindone}>确认签到</Button>
               </Row>
               
               </Modal>
@@ -831,10 +872,7 @@ export default class SiderDemo extends Component{
                           label="DeadLine"
                           rules={[{ required: true, message: 'Please choose the deadline' }]}
                         >
-                          <DatePicker.RangePicker
-                            style={{ width: '100%' }}
-                            getPopupContainer={trigger => trigger.parentNode}
-                          />
+                         <DatePicker showTime onChange={onChange2} onOk={onOk2} />
                         </Form.Item>
                       </Col>
                     </Row>
