@@ -5,6 +5,8 @@ var crypto = require('./md5.js');
 var mailer = require('./mailer.js');
 var verify = require('./verify');
 var flockRouter = require('./flock');
+var taskRouter = require('./task');
+
 router.use((req, res, next) => {
   next();
 })
@@ -137,49 +139,11 @@ router.post('/login', (req, res) => {
    );
 });
 
-router.use('/addflock', flockRouter);
-/*
-// create flock
-router.post('/addflock', (req, res) => {
-    console.log(req.body);
-    data = req.body.data;
-    console.log(data.username, data.title);
-    connection.query(
-        "insert into flock(adminName, flockName) values (?, ?)",
-        [data.username, data.title],
-        function (error, results, fields) {
-            if(error)
-                res.json({msg: error});
-            else
-            {
-                connection.query(
-                    "select flockId from flock where adminName= ? and flockName = ?",
-                    [data.username, data.title],
-                    function (error, results,fields) {
-                        if(error)
-                            res.json({msg: error});
-                        else
-                        {
-                            flockNum = results[0].flockId;
-                            connection.query(
-                                "insert into flockUser values(?, ?, 1)",
-                                [data.username, flockNum],
-                                function (error, results,fields) {
-                                    if(error)
-                                        res.json({msg: error});
-                                    else
-                                        res.json({msg: 'success'});
-                                }
-                            );
-                        }
-                    }
-                );
+// flock CRUD
+router.use('/', flockRouter);
 
-            }
-        }
-    );
-});
-*/
+// create personal task
+router.use('/personaltask', taskRouter);
 
 // test module
 router.post('/test', function (req, res) {

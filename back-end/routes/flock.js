@@ -8,7 +8,7 @@ router.use((req, res, next) => {
 });
 
 // create flock
-router.post('/', (req, res) => {
+router.post('/addflock', (req, res) => {
     console.log(req.body);
     data = req.body.data;
     console.log(data.username, data.title);

@@ -8,23 +8,98 @@ router.use((req, res, next) => {
   next()
 })
 
-router.get('/', function(req, res) {
-  res.send('respond with a resource');
+// personal create flock task
+router.post('/insert', function(req, res) {
+   console.log(req.body);
+   data = req.body.data;
+   console.log(data.username, data.title, data.deadline, data.description);
+   connection.query(
+       "insert into task(userName, taskName, `explain`, deadline) values(?, ?, ?, ?)",
+       [data.username, data.title, data.description, data.deadline],
+       function (error, results, fields) {
+            if(error)
+                res.json({msg: error});
+            else
+                res.json({msg: 'success'});
+       }
+   );
 });
 
-router.post('/insert', (req, res) => {
-  console.log(req.body)
-  data = req.body.data
-  console.log(data.username, data.title, data.deadline, data.description)
-  connection.query(
-    "insert into task(usersName, taskName, annotation, deadline, finish) values(?, ?, ?, ?, 0)", [data.username, data.title, data.description, data.deadline],
-    function(error, results, fields) {
-      if (error) res.json({msg: error})
-    }
-  )
-  res.json({ msg: 'success'})
-})
+// set end time, finish a task
+router.post('/update', function(req, res){
+    console.log(req.body);
+    data = req.body.data;
+    console.log(data.username, data.title, data.deadline);
+    getTime = new Date();
+    connection.query(
+        "update task set endTime = ?, finish = 1 where userName = ? and taskName = ? and deadline = ?",
+        [getTime, data.username, data.title, data.deadline],
+        function (error, results, fields) {
+            if(error)
+                res.json({msg: error});
+            else
+                res.json({msg: 'success'});
+        }
+    );
+});
 
+// remove personal task
+router.post('/delete', function(req, res){
+    console.log(req.body);
+    data = req.body.data;
+    console.log(data.username, data.title);
+    connection.query(
+        "delete from task where userName = ? and taskName = ? and deadline = ?",
+        [data.username, data.title, data.deadline],
+        function (error, results, fields) {
+            if(error)
+                res.json({msg: error});
+            else
+                res.json({msg: 'success'});
+        }
+    );
+});
+
+// get tasks on someday
+router.post('/queryday', function(req, res){
+    console.log(req.body);
+    data = req.body.data;
+    console.log(data.username, data.date, data.type);
+    stTime = data.date + " 00:00";
+    edTime = data.date + " 23:59:59";
+    console.log(stTime + ", "+ edTime);
+    connection.query(
+        "select * from task where userName = ? and deadline between ? and ? and finish = ? order by deadline desc",
+        [data.username, stTime, edTime, data.type],
+        function (error, results, fields) {
+            if(error)
+                res.json({msg: error});
+            else
+                res.json(results);
+        }
+    );
+});
+
+// all members's ddls on someday in a flock
+router.post('/queryflock', function (req, res) {
+    console.log(req.body);
+    data = req.body.data;
+    console.log(data.flockid, data.date);
+    stTime = data.date + " 00:00";
+    edTime = data.date + " 23:59:59";
+    connection.query(
+        "select * from task where flockId = ? and deadline between ? and ?",
+        [data.flockid, stTime, edTime],
+        function (error, results, fields) {
+            if(error)
+                res.json({msg: error});
+            else
+                res.json(results);
+        }
+    );
+});
+
+// set start time
 router.post('/arrange', (req, res) => {
   console.log(req.body)
   data = req.body.data
@@ -36,61 +111,6 @@ router.post('/arrange', (req, res) => {
     }
   )
   res.json({ msg: 'success'})
-})
-
-router.post('/update', (req, res) => {
-    console.log(req.body)
-    data = req.body.data
-    console.log(data.username, data.title)
-    getTime = new Date()
-    connection.query(
-      "update task set endTime = ?, finish = 1 where userName = ? and title = ?", [getTime, data.username, data.title],
-      function(error, results, fields) {
-        if (error) res.json({msg: error})
-      }
-    )
-    res.json({ msg: 'success'})
-})
-
-router.post('/delete', (req, res) => {
-    console.log(req.body)
-    data = req.body.data
-    console.log(data.username, data.title)
-    connection.query(
-      "delete from task where userName = ? and title = ?", [data.username, data.title],
-      function(error, results, fields) {
-        if (error) res.json({msg: error})
-      }
-    )
-    res.json({ msg: 'success'})
-})
-
-router.post('/queryday', (req, res) => {
-    console.log(req.body)
-    data = req.body.data
-    console.log(data.username, data.date, data.type)
-    connection.query(
-      "SELECT * FROM task WHERE username = ? and deadline = ? and finish = ?", [data.username, data.date, data.type],
-      function(error, results, fields) {
-        if (error) res.json({msg: error})
-        console.log(results)
-        res.json(results)
-      }
-    )
-})
-
-router.post('/queryflock', (req, res) => {
-    console.log(req.body)
-    data = req.body.data
-    console.log(data.flockid, data.date)
-    connection.query(
-      "SELECT * FROM task WHERE flockId = ? and deadline = ?", [data.flockid, data.date],
-      function(error, results, fields) {
-        if (error) res.json({msg: error})
-        console.log(results)
-        res.json(results)
-      }
-    )
-})
+});
 
 module.exports = router
