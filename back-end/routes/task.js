@@ -59,17 +59,17 @@ router.post('/delete', function(req, res){
     );
 });
 
-// get tasks on someday
-router.post('/queryday', function(req, res){
+// get tasks done on someday
+router.post('/querydone', function(req, res){
     console.log(req.body);
     data = req.body.data;
-    console.log(data.username, data.date, data.type);
+    console.log(data.username, data.date);
     stTime = data.date + " 00:00";
     edTime = data.date + " 23:59:59";
     console.log(stTime + ", "+ edTime);
     connection.query(
-        "select * from task where userName = ? and deadline between ? and ? and finish = ? order by deadline desc",
-        [data.username, stTime, edTime, data.type],
+        "select * from task where userName = ? and endTime between ? and ? and finish = 1 order by endTime desc",
+        [data.username, stTime, edTime],
         function (error, results, fields) {
             if(error)
                 res.json({msg: error});
@@ -77,6 +77,46 @@ router.post('/queryday', function(req, res){
                 res.json(results);
         }
     );
+});
+
+// get tasks arranged on someday
+router.post('/queryday', function(req, res){
+  console.log(req.body);
+  data = req.body.data;
+  console.log(data.username, data.date);
+  stTime = data.date + " 00:00";
+  edTime = data.date + " 23:59:59";
+  console.log(stTime + ", "+ edTime);
+  connection.query(
+      "select * from task where userName = ? and startTime between ? and ? order by startTime desc",
+      [data.username, stTime, edTime],
+      function (error, results, fields) {
+          if(error)
+              res.json({msg: error});
+          else
+              res.json(results);
+      }
+  );
+});
+
+// get tasks almost missed on someday
+router.post('/querydaily', function(req, res){
+  console.log(req.body);
+  data = req.body.data;
+  console.log(data.username, data.date);
+  stTime = data.date + " 00:00";
+  edTime = data.date + " 23:59:59";
+  console.log(stTime + ", "+ edTime);
+  connection.query(
+      "select * from task where userName = ? and finish = 0 and deadline between ? and ? order by startTime desc",
+      [data.username, stTime, edTime],
+      function (error, results, fields) {
+          if(error)
+              res.json({msg: error});
+          else
+              res.json(results);
+      }
+  );
 });
 
 // all members's ddls on someday in a flock
