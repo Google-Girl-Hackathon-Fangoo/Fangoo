@@ -48,12 +48,13 @@ router.post('/addflock', (req, res) => {
     );
 });
 
+// admin add flock members
 router.post('/adduser', (req, res) => {
     console.log(req.body)
     data = req.body.data
     console.log(data.username, data.searchid, data.flockid)
     connection.query(
-      "select authorityType from flockUser where flockId = ? and usersName = ?", [data.flockid, data.username],
+      "select authorityType from flockUser where flockId = ? and userName = ?", [data.flockid, data.username],
       function(error, results, fields) {
         if (error) res.json({msg: error})
         else if (results[0] == undefined)
@@ -71,19 +72,20 @@ router.post('/adduser', (req, res) => {
     )
 })
   
+// admin delete flock members 
 router.post('/deluser', (req, res) => {
   console.log(req.body)
   data = req.body.data
   console.log(data.username, data.searchid, data.flockid)
   connection.query(
-    "select authorityType from flockUser where flockId = ? and usersName = ?", [data.flockid, data.username],
+    "select authorityType from flockUser where flockId = ? and userName = ?", [data.flockid, data.username],
     function(error, results, fields) {
       if (error) res.json({msg: error})
       else if (results[0] == undefined)
         res.json({msg : 'failed because you are not admin'})
       else {
         connection.query(
-            "delete from flockUser where usersName = ? and flockId = ?", [data.searchid, data.flockid],
+            "delete from flockUser where userName = ? and flockId = ?", [data.searchid, data.flockid],
             function(error, results, fields) {
             if (error) res.json({msg: error})
           }
@@ -93,6 +95,68 @@ router.post('/deluser', (req, res) => {
     }
   )
 })
+
+// any member quit a group
+router.post('/quit', (req, res) => {
+  console.log(req.body)
+  data = req.body.data
+  console.log(data.username, data.flockid)
+  connection.query(
+    "delete from flockUser where flockId = ? and userName = ?", [data.flockid, data.username],
+    function(error, results, fields) {
+      if (error) res.json({msg: error})
+    }
+  )
+  res.json({ msg: 'success'})
+});
+
+// give authority to some members
+router.post('/deluser', (req, res) => {
+  console.log(req.body)
+  data = req.body.data
+  console.log(data.username, data.searchid, data.flockid)
+  connection.query(
+    "select authorityType from flockUser where flockId = ? and userName = ?", [data.flockid, data.username],
+    function(error, results, fields) {
+      if (error) res.json({msg: error})
+      else if (results[0] == undefined)
+        res.json({msg : 'failed because you are not admin'})
+      else {
+        connection.query(
+          "update flockUser set authorityType = 1 where userName = ? and flockId = ?", [data.searchid, data.flockid],
+          function(error, results, fields) {
+            if (error) res.json({msg: error})
+          }
+        )
+        res.json({ msg: 'success'})
+      }
+    }
+  )
+})
+
+// give authority to some members
+router.post('/deluser', (req, res) => {
+  console.log(req.body)
+  data = req.body.data
+  console.log(data.username, data.searchid, data.flockid)
+  connection.query(
+    "select authorityType from flockUser where flockId = ? and userName = ?", [data.flockid, data.username],
+    function(error, results, fields) {
+      if (error) res.json({msg: error})
+      else if (results[0] == undefined)
+        res.json({msg : 'failed because you are not admin'})
+      else {
+        connection.query(
+          "update flockUser set authorityType = 1 where userName = ? and flockId = ?", [data.searchid, data.flockid],
+            function(error, results, fields) {
+              if (error) res.json({msg: error})
+            }
+          )
+          res.json({ msg: 'success'})
+        }
+      }
+    )
+  })
 
 module.exports = router;
 

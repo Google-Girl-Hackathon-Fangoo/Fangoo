@@ -21,12 +21,12 @@ $$
 delimiter ;
 
 create table flockUser (
-  usersName varchar(50),
+  userName varchar(50),
   flockId int,
   authorityType int,
-  foreign key(usersName) references users(username),
+  foreign key(userName) references users(username),
   foreign key(flockId) references flock(flockId),
-  primary key(flockId, usersName)
+  primary key(flockId, userName)
 )
 
 drop table if exists task;
