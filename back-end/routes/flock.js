@@ -9,67 +9,64 @@ router.use((req, res, next) => {
 
 // create flock
 router.post('/addflock', (req, res) => {
-    console.log(req.body);
-    data = req.body.data;
-    console.log(data.username, data.title);
-    connection.query(
-        "insert into flock(adminName, flockName) values (?, ?)",
-        [data.username, data.title],
-        function (error, results, fields) {
+  console.log(req.body);
+  data = req.body.data;
+  console.log(data.username, data.title);
+  connection.query(
+    "insert into flock(adminName, flockName) values (?, ?)",
+    [data.username, data.title],
+    function (error, results, fields) {
+      if(error)
+        res.json({msg: error});
+      else {
+        connection.query(
+          "select flockId from flock where adminName= ? and flockName = ?",
+          [data.username, data.title],
+          function (error, results,fields) {
             if(error)
-                res.json({msg: error});
-            else
-            {
-                connection.query(
-                    "select flockId from flock where adminName= ? and flockName = ?",
-                    [data.username, data.title],
-                    function (error, results,fields) {
-                        if(error)
-                            res.json({msg: error});
-                        else
-                        {
-                            flockNum = results[0].flockId;
-                            connection.query(
-                                "insert into flockUser values(?, ?, 1)",
-                                [data.username, flockNum],
-                                function (error, results,fields) {
-                                    if(error)
-                                        res.json({msg: error});
-                                    else
-                                        res.json({msg: 'success'});
-                                }
-                            );
-                        }
-                    }
-                );
-
+              res.json({msg: error});
+            else {
+              flockNum = results[0].flockId;
+              connection.query(
+                "insert into flockUser values(?, ?, 1)",
+                [data.username, flockNum],
+                function (error, results,fields) {
+                  if(error)
+                    res.json({msg: error});
+                  else
+                    res.json({msg: 'success'});
+                }
+              );
             }
-        }
-    );
+          }
+        );
+      }
+    }
+  );
 });
 
 // admin add flock members
 router.post('/adduser', (req, res) => {
-    console.log(req.body)
-    data = req.body.data
-    console.log(data.username, data.searchid, data.flockid)
-    connection.query(
-      "select authorityType from flockUser where flockId = ? and userName = ?", [data.flockid, data.username],
-      function(error, results, fields) {
-        if (error) res.json({msg: error})
-        else if (results[0] == undefined)
-          res.json({msg : 'failed because you are not admin'})
-        else {
-          connection.query(
-            "insert into flockUser values(?, ?, 0)", [data.searchid, data.flockid],
-            function(error, results, fields) {
-              if (error) res.json({msg: error})
-            }
-          )
-          res.json({ msg: 'success'})
-        }
+  console.log(req.body)
+  data = req.body.data
+  console.log(data.username, data.searchid, data.flockid)
+  connection.query(
+    "select authorityType from flockUser where flockId = ? and userName = ?", [data.flockid, data.username],
+    function(error, results, fields) {
+      if (error) res.json({msg: error})
+      else if (results[0] == undefined)
+        res.json({msg : 'failed because you are not admin'})
+      else {
+        connection.query(
+          "insert into flockUser values(?, ?, 0)", [data.searchid, data.flockid],
+          function(error, results, fields) {
+            if (error) res.json({msg: error})
+          }
+        )
+        res.json({ msg: 'success'})
       }
-    )
+    }
+  )
 })
   
 // admin delete flock members 
@@ -85,8 +82,8 @@ router.post('/deluser', (req, res) => {
         res.json({msg : 'failed because you are not admin'})
       else {
         connection.query(
-            "delete from flockUser where userName = ? and flockId = ?", [data.searchid, data.flockid],
-            function(error, results, fields) {
+          "delete from flockUser where userName = ? and flockId = ?", [data.searchid, data.flockid],
+          function(error, results, fields) {
             if (error) res.json({msg: error})
           }
         )
@@ -160,38 +157,29 @@ router.post('/drop', (req, res) => {
 
 // release flock announce
 router.post('/addflockannounce', function (req, res) {
-    data = req.body.data;
-    connection.query(
-        "select flockId from flock where adminName = ? and flockName = ?",
-        [data.flockCreater, data.flockName],
-        function (error, results, fields) {
-            if(error)
-                res.json({msg: error});
+  data = req.body.data;
+  connection.query(
+    "select flockId from flock where adminName = ? and flockName = ?",
+    [data.flockCreater, data.flockName],
+    function (error, results, fields) {
+      if(error)
+          res.json({msg: error});
+      else {
+        flockNum = results[0].flockId;
+        getTime = new Date();
+        connection.query(
+          "insert into flockanno values(?, ?, ?, ?)",
+          [flockNum, data.announcer, data.details, getTime],
+          function(error, results, fields) {
+            if (error)
+              res.json({msg: error});
             else
-            {
-                flockNum = results[0].flockId;
-                getTime = new Date();
-                connection.query(
-                    "insert into flockanno values(?, ?, ?, ?)",
-                    [flockNum, data.announcer, data.details, getTime],
-                    function(error, results, fields) {
-                        if (error)
-                            res.json({msg: error});
-                        else
-                            res.json({ msg: 'success'});
-                    }
-                );
-            }
-        }
-    );
-
+              res.json({ msg: 'success'});
+          }
+        );
+      }
+    }
+  );
 });
 
-
-
 module.exports = router;
-
-
-
-
-
