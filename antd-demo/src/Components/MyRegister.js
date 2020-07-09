@@ -49,7 +49,7 @@ const tailFormItemLayout = {
     }
   }
 };
-
+var mail="NULL";
 const MyRegister= () => {
   const [form] = Form.useForm();
 
@@ -58,7 +58,7 @@ const MyRegister= () => {
     console.log("Received values of form: ", values);
   };
   */
- const onFinish = (values) => {
+const onFinish = (values) => {
   console.log(values)
   axios.post("/users/register",{
     data: values
@@ -68,6 +68,19 @@ const MyRegister= () => {
       message.success('Register Succed!')
     }else{
       message.warn('Register Failed')
+    }
+  })
+}
+const onCaptcha = (values) => {
+  console.log(mail);
+  axios.post("/users/captcha",{
+    data: {email:mail}
+  }).then((response)=>{
+    console.log(response.data)
+    if (response.data.msg === 'success'){
+      message.success('Captcha send Successfully!')
+    }else{
+      message.warn('Captcha cannot send!')
     }
   })
 }
@@ -152,9 +165,14 @@ const MyRegister= () => {
           {
             required: true,
             message: "Please input your password!"
-          }
+          },
+          ({ getFieldValue }) => ({
+            validator(rule, value) {
+              mail=getFieldValue("email");
+                return Promise.resolve();
+            }
+          })
         ]}
-        hasFeedback
       >
         <Input.Password />
       </Form.Item>
@@ -203,7 +221,7 @@ const MyRegister= () => {
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Button>Get captcha</Button>
+            <Button onClick={onCaptcha}>Get captcha</Button>
           </Col>
         </Row>
       </Form.Item> 

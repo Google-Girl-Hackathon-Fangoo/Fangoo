@@ -99,7 +99,6 @@ function onChange1(value, dateString) {
 function onOk1(value) {
   console.log('onOk: ', value);
 }
-
 var user_name="user1";
 /*
 var children=[];
