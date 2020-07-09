@@ -1,7 +1,7 @@
 import React,{ Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Form, Layout, Menu, Button, Space, Tooltip, Drawer, Select, message } from 'antd';
-import {Row,Col,Input,DatePicker,Checkbox} from 'antd';
+import {Modal,Row,Col,Input,DatePicker,Checkbox} from 'antd';
 import { ScheduleOutlined, CarryOutOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
 import './SiderTwoCopy.css';
@@ -54,6 +54,28 @@ class ChooseForm extends Component{
   }
   
 }
+var li = ["Jack", "Tom"];
+var deltasksel="";
+function onChangeS(value) {
+  deltasksel=value;
+  console.log(`selected ${value}`);
+}
+
+function onBlurS() {
+  console.log("blur");
+}
+
+function onFocusS() {
+  console.log("focus");
+}
+
+function onSearchS(val) {
+  console.log("search:", val);
+}
+var itemList = [];
+for (let item of li) {
+  itemList.push(<Option value={item}>{item}</Option>);
+}
 class SiderTwoCopy extends Component{
   constructor(props){
     super(props);
@@ -64,7 +86,26 @@ class SiderTwoCopy extends Component{
     this.user_name=this.props.match.params.name;
     console.log(this.props.match.params.name);
   }
-  state = { visible: false,type: true};
+  state = { visible: false,type: true,
+            visible1: false};
+  showModal = () => {
+    this.setState({
+      visible1: true,
+    });
+  };
+  handleOk1 = e => {
+    console.log(e);
+    this.setState({
+      visible1: false,
+    });
+  };
+
+  handleCancel1 = e => {
+    console.log(e);
+    this.setState({
+      visible1: false,
+    });
+  };
   showDrawer=() =>{
     this.setState({
       visible: true,
@@ -79,14 +120,30 @@ class SiderTwoCopy extends Component{
   render(){
     const onFinish = (values) => {
       console.log(values)
-      axios.post("/users/task",{
-        data: values
+      axios.post("/task/insert",{
+        data: {username:this.user_name,title:values.title,
+          deadline:values.deadline.format('YYYY-MM-DD HH:mm:ss'),
+          desciption:values.desciption
+        }
       }).then((response)=>{
         console.log(response.data)
         if (response.data.msg === 'success'){
           message.success('Create Succed!')
         }else{
           message.warn('Create Failed')
+        }
+      })
+    }
+    const onFinishS = (values) => {
+      console.log(deltasksel)
+      axios.post("/users/deltask",{
+        data: values
+      }).then((response)=>{
+        console.log(response.data)
+        if (response.data.msg === 'success'){
+          message.success('Login Succed!')
+        }else{
+          message.warn('Login Failed')
         }
       })
     }
@@ -146,22 +203,6 @@ class SiderTwoCopy extends Component{
             onClose={this.onClose}
             visible={this.state.visible}
             bodyStyle={{ paddingBottom: 80 }}
-            /*
-            footer={
-              <div
-                style={{
-                  textAlign: 'right',
-                }}
-              >
-                <Button onClick={this.onClose} style={{ marginRight: 8 }}>
-                  Cancel
-                </Button>
-                <Button onClick={this.onClose} type="primary">
-                  Submit
-                </Button>
-              </div>
-            }
-            */
           >
            {/* <ChooseForm type={this.state.type}/> */}
           <Form layout="vertical" hideRequiredMark onFinish={onFinish}>
@@ -242,8 +283,36 @@ class SiderTwoCopy extends Component{
           >
             <SubMenu key="sub1" icon={<CarryOutOutlined />} title="Task">
             {/*<MyList data={data1}/>  */}
-            <Checkbox.Group options={options} /*defaultValue={['Pear']}*/ onChange={onChange} />
+            <Checkbox.Group options={options} onChange={onChange} />
             <div align='right'>
+            <Button shape="circle" onClick={this.showModal}>-</Button>
+            <Modal
+                 title="删除任务"
+                 visible={this.state.visible1}
+                 onOk={this.handleOk1}
+                 onCancel={this.handleCancel1}
+                >
+              <Form
+                  onFinish={onFinishS}
+                >
+                <Select
+                  showSearch
+                  style={{ width: 200 }}
+                  placeholder="Select a task"
+                  optionFilterProp="children"
+                  onChange={onChangeS}
+                  onFocus={onFocusS}
+                  onBlur={onBlurS}
+                  onSearch={onSearchS}
+                  filterOption={(input, option) =>
+                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  }
+                >
+                  {itemList}
+                </Select>
+                <Button htmlType="submit">确认删除</Button>
+                </Form>
+            </Modal>
             <Button type='primary' shape="circle" onClick={this.showDrawer}>+</Button>
             </div>
             </SubMenu>
