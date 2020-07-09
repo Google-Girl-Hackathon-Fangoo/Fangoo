@@ -43,3 +43,16 @@ create table task (
   foreign key(userName) references users(username),
   foreign key(flockId) references flock(flockId)
 );
+
+drop table if exists flockanno;
+create table flockanno
+(
+	flockId int, 
+	announcer varchar(50),
+	details text,
+	annoTime datetime,
+	primary key(flockId, announcer, annoTime),
+	foreign key(flockId) references flock(flockId),
+	foreign key(announcer) references users(username)
+);
+
