@@ -145,10 +145,14 @@ function handleChange(value) {
 var selected_id=0;
 var task=[];
 var deltask=[];
+var flockCreater="name1";
+var flockName="flock1";
 export default class SiderDemo extends Component{
   state = { visible: false,visible1: false,visible2: false,
     visible3:false,visible4:false,visible5:false,
-    visible6:false,visible7:false,visible8:false };
+    visible6:false,visible7:false,visible8:false,
+    visibleaddm:false,visibledelm:false,visiblegiver:false,
+    visibledropr:false,visiblequit:false};
     showModal = () => {
       this.setState({
         visible: true,
@@ -294,7 +298,6 @@ export default class SiderDemo extends Component{
       visible7: false,
     });
   };
-
   handleCancel7 = e => {
     console.log(e);
     this.setState({
@@ -316,6 +319,93 @@ export default class SiderDemo extends Component{
     console.log(e);
     this.setState({
       visible8: false,
+    });
+  };
+  showModaladdm = () => {
+    this.setState({
+      visibleaddm: true,
+    });
+  };
+  handleOkaddm = e => {
+    console.log(e);
+    this.setState({
+      visibleaddm: false,
+    });
+  };
+  handleCanceladdm = e => {
+    console.log(e);
+    this.setState({
+      visibleaddm: false,
+    });
+  };
+  showModaldelm = () => {
+    this.setState({
+      visibledelm: true,
+    });
+  };
+  handleOkdelm = e => {
+    console.log(e);
+    this.setState({
+      visibledelm: false,
+    });
+  };
+  handleCanceldelm = e => {
+    console.log(e);
+    this.setState({
+      visibledelm: false,
+    });
+  };
+
+  showModalgiver = () => {
+    this.setState({
+      visiblegiver: true,
+    });
+  };
+  handleOkgiver = e => {
+    console.log(e);
+    this.setState({
+      visiblegiver: false,
+    });
+  };
+  handleCancelgiver = e => {
+    console.log(e);
+    this.setState({
+      visiblegiver: false,
+    });
+  };
+  showModaldropr = () => {
+    this.setState({
+      visibledropr: true,
+    });
+  };
+  handleOkdropr = e => {
+    console.log(e);
+    this.setState({
+      visibledropr: false,
+    });
+  };
+  handleCanceldropr = e => {
+    console.log(e);
+    this.setState({
+      visibledropr: false,
+    });
+  };
+
+  showModalquit = () => {
+    this.setState({
+      visiblequit: true,
+    });
+  };
+  handleOkquit = e => {
+    console.log(e);
+    this.setState({
+      visiblequit: false,
+    });
+  };
+  handleCancelquit = e => {
+    console.log(e);
+    this.setState({
+      visiblequit: false,
     });
   };
   render(){
@@ -404,8 +494,78 @@ export default class SiderDemo extends Component{
     }
     const onFinish5 = (values) => {
       console.log(values)
-      axios.post("/users/notification",{
-        data: values
+      axios.post("/users/addflockannounce",{
+        data: {flockCreater:flockCreater,flockName:flockName,
+              announcer:user_name,details:values.notification}
+      }).then((response)=>{
+        console.log(response.data)
+        if (response.data.msg === 'success'){
+          message.success('Create Succed!')
+        }else{
+          message.warn('Create Failed')
+        }
+      })
+    }
+    const onFinishaddm = (values) => {
+      console.log(values)
+      axios.post("/users/adduser",{
+        data: {username:values.username,searchid:values.searchid,
+              flockid:selected_id}
+      }).then((response)=>{
+        console.log(response.data)
+        if (response.data.msg === 'success'){
+          message.success('Create Succed!')
+        }else{
+          message.warn('Create Failed')
+        }
+      })
+    }
+    const onFinishdelm = (values) => {
+      console.log(values)
+      axios.post("/users/deluser",{
+        data: {username:values.username,searchid:values.searchid,
+              flockid:selected_id}
+      }).then((response)=>{
+        console.log(response.data)
+        if (response.data.msg === 'success'){
+          message.success('Create Succed!')
+        }else{
+          message.warn('Create Failed')
+        }
+      })
+    }
+    const onFinishgiver = (values) => {
+      console.log(values)
+      axios.post("/users/give",{
+        data: {username:values.username,searchid:values.searchid,
+              flockid:selected_id}
+      }).then((response)=>{
+        console.log(response.data)
+        if (response.data.msg === 'success'){
+          message.success('Create Succed!')
+        }else{
+          message.warn('Create Failed')
+        }
+      })
+    }
+    const onFinishdropr = (values) => {
+      console.log(values)
+      axios.post("/users/drop",{
+        data: {username:values.username,searchid:values.searchid,
+              flockid:selected_id}
+      }).then((response)=>{
+        console.log(response.data)
+        if (response.data.msg === 'success'){
+          message.success('Create Succed!')
+        }else{
+          message.warn('Create Failed')
+        }
+      })
+    }
+    const onFinishquit = (values) => {
+      console.log(values)
+      axios.post("/users/quit",{
+        data: {username:user_name,flockid:selected_id}
       }).then((response)=>{
         console.log(response.data)
         if (response.data.msg === 'success'){
@@ -650,6 +810,25 @@ export default class SiderDemo extends Component{
                     </Row>
                   
                 </Form>
+                </Modal>
+                <Button type='text' onClick={this.showModalquit}>退群</Button>
+                <Modal
+                 title="退群"
+                 visible={this.state.visiblequit}
+                 onOk={this.handleOkquit}
+                 onCancel={this.handleCancelquit}
+                >
+                  <Form onFinish={onFinishquit}>
+                  确认退出该群吗？
+                  <Form.Item>
+                        <Button onClick={this.onClose} style={{ marginRight: 8 }}>
+                          取消
+                        </Button>
+                        <Button htmlType='submit' onClick={this.onClose} type="primary">
+                          确认退出
+                        </Button>
+                    </Form.Item>
+                  </Form>
                 </Modal>
                 </div>
                 </SubMenu>
@@ -932,7 +1111,166 @@ export default class SiderDemo extends Component{
                     </Form.Item>
                   </Form>
                 </Modal>
-                <Button type='text'>生成群报表</Button>
+                <Button type='text' onClick={this.showModaladdm}>增加群成员</Button>
+                <Modal
+                 title="添加群成员"
+                 visible={this.state.visibleaddm}
+                 onOk={this.handleOkaddm}
+                 onCancel={this.handleCanceladdm}
+                >
+                <Form layout="vertical" hideRequiredMark onFinish={onFinishaddm}>
+                  <Row gutter={16}>
+                      <Col span={12}>
+                        <Form.Item
+                            name="username"
+                            label="username"
+                          rules={[{ required: true, message: 'Please enter username' }]}
+                        >
+                          <Input placeholder="Please enter username" />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={16}>
+                      <Col span={12}>
+                        <Form.Item
+                            name="searchid"
+                            label="Searchid"
+                          rules={[{ required: true, message: 'Please enter searchid' }]}
+                        >
+                          <Input placeholder="Please enter searchid" />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                  <Form.Item>
+                        <Button onClick={this.onClose} style={{ marginRight: 8 }}>
+                          Cancel
+                        </Button>
+                        <Button htmlType='submit' onClick={this.onClose} type="primary">
+                          Submit
+                        </Button>
+                    </Form.Item>
+                  </Form>
+                </Modal>
+                <Button type='text' onClick={this.showModaldelm}>删除群成员</Button>
+                <Modal
+                 title="删除群成员"
+                 visible={this.state.visibledelm}
+                 onOk={this.handleOkdelm}
+                 onCancel={this.handleCanceldelm}
+                >
+                <Form layout="vertical" hideRequiredMark onFinish={onFinishdelm}>
+                  <Row gutter={16}>
+                      <Col span={12}>
+                        <Form.Item
+                            name="username"
+                            label="username"
+                          rules={[{ required: true, message: 'Please enter username' }]}
+                        >
+                          <Input placeholder="Please enter username" />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={16}>
+                      <Col span={12}>
+                        <Form.Item
+                            name="searchid"
+                            label="Searchid"
+                          rules={[{ required: true, message: 'Please enter searchid' }]}
+                        >
+                          <Input placeholder="Please enter searchid" />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                  <Form.Item>
+                        <Button onClick={this.onClose} style={{ marginRight: 8 }}>
+                          Cancel
+                        </Button>
+                        <Button htmlType='submit' onClick={this.onClose} type="primary">
+                          Submit
+                        </Button>
+                    </Form.Item>
+                  </Form>
+                </Modal>
+                <Button type='text' onClick={this.showModalgiver}>给予成员管理权限</Button>
+                <Modal
+                 title="给予成员管理权限"
+                 visible={this.state.visiblegiver}
+                 onOk={this.handleOkgiver}
+                 onCancel={this.handleCancelgiver}
+                >
+                <Form layout="vertical" hideRequiredMark onFinish={onFinishgiver}>
+                  <Row gutter={16}>
+                      <Col span={12}>
+                        <Form.Item
+                            name="username"
+                            label="username"
+                          rules={[{ required: true, message: 'Please enter username' }]}
+                        >
+                          <Input placeholder="Please enter username" />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={16}>
+                      <Col span={12}>
+                        <Form.Item
+                            name="searchid"
+                            label="Searchid"
+                          rules={[{ required: true, message: 'Please enter searchid' }]}
+                        >
+                          <Input placeholder="Please enter searchid" />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                  <Form.Item>
+                        <Button onClick={this.onClose} style={{ marginRight: 8 }}>
+                          Cancel
+                        </Button>
+                        <Button htmlType='submit' onClick={this.onClose} type="primary">
+                          Submit
+                        </Button>
+                    </Form.Item>
+                  </Form>
+                </Modal>
+                <Button type='text' onClick={this.showModaldropr}>撤销成员管理权限</Button>
+                <Modal
+                 title="撤销成员管理权限"
+                 visible={this.state.visibledropr}
+                 onOk={this.handleOkdropr}
+                 onCancel={this.handleCanceldropr}
+                >
+                <Form layout="vertical" hideRequiredMark onFinish={onFinishdropr}>
+                  <Row gutter={16}>
+                      <Col span={12}>
+                        <Form.Item
+                            name="username"
+                            label="username"
+                          rules={[{ required: true, message: 'Please enter username' }]}
+                        >
+                          <Input placeholder="Please enter username" />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={16}>
+                      <Col span={12}>
+                        <Form.Item
+                            name="searchid"
+                            label="Searchid"
+                          rules={[{ required: true, message: 'Please enter searchid' }]}
+                        >
+                          <Input placeholder="Please enter searchid" />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                  <Form.Item>
+                        <Button onClick={this.onClose} style={{ marginRight: 8 }}>
+                          Cancel
+                        </Button>
+                        <Button htmlType='submit' onClick={this.onClose} type="primary">
+                          Submit
+                        </Button>
+                    </Form.Item>
+                  </Form>
+                </Modal>
             </Menu>
           </Sider>
         </Layout>
