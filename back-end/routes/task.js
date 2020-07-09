@@ -3,10 +3,9 @@ var router = express.Router();
 
 var connection = require('./database.js');
 
-router.use((req, res, next) => {
-  //  console.log('Success Time: ', Date.now())
-  next()
-})
+router.use(function(req, res, next) {
+    next();
+});
 
 // personal create flock task
 router.post('/insert', function(req, res) {
@@ -101,16 +100,19 @@ router.post('/queryflock', function (req, res) {
 
 // set start time
 router.post('/arrange', (req, res) => {
-  console.log(req.body)
-  data = req.body.data
-  console.log(data.username, data.title, data.date)
-  connection.query(
-    "update task set startTime = ? where userName = ? and title = ?", [data.date, data.username, data.title],
-    function(error, results, fields) {
-      if (error) res.json({msg: error})
-    }
-  )
-  res.json({ msg: 'success'})
+    console.log(req.body)
+    data = req.body.data
+    console.log(data.username, data.title, data.date)
+    connection.query(
+        "update task set startTime = ? where userName = ? and taskName = ? and deadline = ?",
+        [data.date, data.username, data.title, data.deadline],
+        function(error, results, fields) {
+            if (error)
+                res.json({msg: error});
+            else
+                res.json({ msg: 'success'});
+        }
+    )
 });
 
-module.exports = router
+module.exports = router;
