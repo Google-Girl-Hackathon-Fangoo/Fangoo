@@ -97,19 +97,6 @@ class SiderTwo extends Component{
     });
   };
   render(){
-    const Onload1 = (values) => {
-      console.log(values)
-      axios.post("/users/personaltask/queryday",
-        {data:{ username: this.user_name,date:"2020-07-09"}}
-      ).then((response)=>{
-        console.log(response.data)
-        for (let item of response.data) {
-          task.push(item.taskName);
-          deltask.push(<Option value={item.taskName}>{item.taskName}</Option>);
-        }
-        console.log(task);
-      })
-    }
     const onFinish = (values) => {
       console.log(values)
       axios.post("/users/schedule",{
