@@ -41,6 +41,7 @@ class ChooseForm extends Component{
 }
 function onChange(checkedValues) {
   console.log('checked = ', checkedValues);
+  //window.location.reload();
 }
 const plainOptions = ['Apple', 'Pear', 'Orange'];
 const options = [
@@ -242,9 +243,11 @@ class SiderTwo extends Component{
             {/*<MyList data={data1}/> 
             <Checkbox.Group options={plainOptions} defaultValue={['Apple']} onChange={onChange} />
             */}
-            <Checkbox.Group options={options} /*defaultValue={['Pear']}*/ onChange={onChange} />
-            
+            <Checkbox.Group options={options} onChange={onChange} />
             <div align='right'>
+            <Tooltip title='Click twice'>
+            <Button type='primary' shape="circle"><Link to={"/SiderTwoCopy"+"/"+this.user_name}>-</Link></Button>
+              </Tooltip>
               <Tooltip title='Click twice'>
             <Button type='primary' shape="circle"><Link to={"/SiderTwoCopy"+"/"+this.user_name}>+</Link></Button>
               </Tooltip>
