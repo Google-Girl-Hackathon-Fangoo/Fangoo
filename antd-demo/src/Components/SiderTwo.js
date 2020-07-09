@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Form,Layout, Menu, Button, Space, Tooltip, Drawer, Select, message } from 'antd';
 import {Row,Col,Input,DatePicker,Checkbox} from 'antd';
 import { ScheduleOutlined, CarryOutOutlined } from '@ant-design/icons';
+import moment from 'moment';
 import 'antd/dist/antd.css';
 import './SiderTwo.css';
 import SiderDemo from './SiderDemo.js';
@@ -69,14 +70,49 @@ class SiderTwo extends Component{
     this.user_name="NULL";
     this.taskoptions=[];
     this.deltask=[];
+    this.state = {
+      isLoading : false
+    }
   };
   componentWillMount(){
     console.log(this.props);
-    this.user_name=this.props.location.query.name;
+  //  this.user_name=this.props.location.query.name;
+   /* this.user_name=this.props.query.name;
     name=this.user_name;
-    this.taskoptions=this.props.location.query.task;
-    this.deltask=this.props.location.query.deltask;
+    //this.taskoptions=this.props.location.query.task;
+  //  this.deltask=this.props.location.query.deltask;
+    this.deltask=this.props.query.deltask;
     console.log(this.taskoptions);
+    
+    this.setState({
+      isLoading : true
+    })
+   // this.intervalId = setInterval(() => {
+    this.loadData([{"user_name":this.user_name}])
+    //}, 5000)*/
+  }
+  componentWillUnmount(){
+    clearInterval(this.intervalId)
+  }
+  loadData = (values) => {
+    task=[];
+    deltask=[];
+    console.log(values[0].user_name)
+    axios.post("/users/personaltask/queryday",
+      {data:{ username: values[0].user_name,date:moment().format('YYYY-MM-DD')}}
+    ).then((response)=>{
+//      console.log(response.data)
+      for (let item of response.data) {
+        task.push(item.taskName);
+        deltask.push(<Option value={item.taskName}>{item.taskName}</Option>);
+      }
+    })
+    console.log(task)
+    console.log("set false")
+    this.setState({
+      taskoptions: task,
+      isLoading : false
+    })
   }
   state = { visible: false,type: true};
   showDrawer1=() =>{
@@ -110,6 +146,15 @@ class SiderTwo extends Component{
         }
       })
     }
+    let {isLoading} = this.state
+    console.log("render" + isLoading)
+    if (isLoading){
+      return (
+        <div> waiting</div>
+      )
+    }
+      
+    console.log("render" + isLoading)
     return (
     <Layout>
        <Header className="header">
@@ -261,7 +306,7 @@ class SiderTwo extends Component{
             {/*<MyList data={data1}/> 
             <Checkbox.Group options={plainOptions} defaultValue={['Apple']} onChange={onChange} />
             */}
-            <Checkbox.Group options={this.taskoptions} onChange={onChange} />
+            <Checkbox.Group options={this.state.taskoptions} onChange={onChange} />
             <div align='right'>
             <Tooltip title='Click twice'>
             <Button type='primary' shape="circle"><Link to={{pathname:'/SiderTwoCopy',query:{name:this.user_name,task:this.taskoptions,deltask:this.deltask}}}>-</Link></Button>

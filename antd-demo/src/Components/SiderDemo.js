@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import 'antd/dist/antd.css';
 import './SiderDemo.css';
 import SiderTwo from './SiderTwo.js';
-import { Link } from 'react-router-dom';
+import { Link, Route, BrowserRouter as Router } from 'react-router-dom';
 import moment from 'moment';
 import { Checkbox,Form,DatePicker,Col,Input,Select,message,Modal,Cascader, Row, Layout, Menu, Breadcrumb,Button,Space,Dropdown } from 'antd';
 import {LockOutlined,UserOutlined, TeamOutlined,UsergroupAddOutlined, ScheduleOutlined, CarryOutOutlined, NotificationOutlined } from '@ant-design/icons';
@@ -607,12 +607,15 @@ export default class SiderDemo extends Component{
       <Header className="header">
         <Space size={330}>
         <div className="logo" />
+        <Router>
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
           <Menu.Item key="1"><Link to="/SiderDemo">page 1</Link></Menu.Item>
-          <Button onClick={Onload1}><Link to={{pathname:'/SiderTwo',query:{name:user_name,task:task,deltask:deltask}}}>page 2</Link></Button>
+          {/*<Button onClick={Onload1}><Link to={{pathname:'/SiderTwo',query:{name:user_name,task:task,deltask:deltask}}}>page 2</Link></Button>*/}
+          <Menu.Item key="2"><Link to={{pathname:'/SiderTwo',query:{name:user_name,task:task,deltask:deltask}}}>page 2</Link></Menu.Item>
           <Menu.Item key="3">page 3</Menu.Item>
           <Menu.Item key="4">page 4</Menu.Item>
         </Menu>
+       </Router>
        <Button type="primary" onClick={this.showModal}>{user_name}</Button>
        <Modal
             title="Log-in"
