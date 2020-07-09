@@ -48,6 +48,32 @@ router.post('/', (req, res) => {
     );
 });
 
+router.post('/adduser', (req, res) => {
+    console.log(req.body)
+    data = req.body.data
+    console.log(data.username, data.flockid)
+    connection.query(
+      "insert into flockUser values(?, ?, 0)", [data.username, data.flockid],
+      function(error, results, fields) {
+        if (error) res.json({msg: error})
+      }
+    )
+    res.json({ msg: 'success'})
+  })
+  
+router.post('/deluser', (req, res) => {
+  console.log(req.body)
+  data = req.body.data
+  console.log(data.username, data.flockid)
+  connection.query(
+    "delete from flockUser where usersName = ? and flockId = ?values(?, ?, 0)", [data.username, data.flockid],
+    function(error, results, fields) {
+      if (error) res.json({msg: error})
+    }
+  )
+  res.json({ msg: 'success'})
+})
+
 module.exports = router;
 
 

@@ -17,7 +17,7 @@ router.post('/insert', (req, res) => {
   data = req.body.data
   console.log(data.username, data.title, data.deadline, data.description)
   connection.query(
-    "insert into task(usersName, taskName, explain, deadline, finish) values(?, ?, ?, ?, 0)", [data.username, data.title, data.description, data.deadline],
+    "insert into task(usersName, taskName, annotation, deadline, finish) values(?, ?, ?, ?, 0)", [data.username, data.title, data.description, data.deadline],
     function(error, results, fields) {
       if (error) res.json({msg: error})
     }

@@ -34,7 +34,7 @@ create table task (
   finish int default 0,
   flockId int,
   taskName text,
-  explain text,
+  annotation text,
   startTime datetime,
   endTime datetime,
   deadline datetime,
