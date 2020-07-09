@@ -81,35 +81,50 @@ router.post('/deluser', (req, res) => {
 router.post('/addflockannounce', function (req, res) {
     data = req.body.data;
     connection.query(
-        "select usersName from flockUser where flockId = ?",
-        data.flockId,
+        "select authorityType from flockUser where flockId = ? and usersName = ?",
+        [data.flockId, data.announcer],
         function (error, results, fields) {
             if (error)
                 res.json({msg: error});
+            else if(results[0].authorityType === 0)
+                res.json({msg: 'no admin'});
             else
             {
-                flag = 0;
-                for(var i=0; i<results.length;i++)
-                {
-                    connection.query(
-                        "insert into task(userName, taskName, `explain`, deadline, flockId) values(?, ?, ?, ?, ?)",
-                        [results[i].usersName, data.title, data.description, data.deadline, data.flockId],
-                        function (error, results, fields) {
-                            if(error) {
-                                console.log(results[i]);
-                                res.json({msg: error});
-                                flag=1;
+                connection.query(
+                    "select usersName from flockUser where flockId = ?",
+                    data.flockId,
+                    function (error, results, fields) {
+                        if (error)
+                            res.json({msg: error});
+                        else
+                        {
+                            flag = 0;
+                            for(var i=0; i<results.length;i++)
+                            {
+                                connection.query(
+                                    "insert into task(userName, taskName, `explain`, deadline, flockId) values(?, ?, ?, ?, ?)",
+                                    [results[i].usersName, data.title, data.description, data.deadline, data.flockId],
+                                    function (error, results, fields) {
+                                        if(error) {
+                                            console.log(results[i]);
+                                            res.json({msg: error});
+                                            flag=1;
+                                        }
+                                    }
+                                );
+                                if(flag === 1)
+                                    break;
                             }
+                            if(flag === 0)
+                                res.json({msg: 'success'});
                         }
-                    );
-                    if(flag === 1)
-                        break;
-                }
-                if(flag === 0)
-                    res.json({msg: 'success'});
+                    }
+                );
             }
         }
     );
+
+
 });
 
 
