@@ -48,8 +48,8 @@ router.post('/delete', function(req, res) {
   data = req.body.data;
   console.log(data.username, data.title);
   connection.query(
-    "delete from task where userName = ? and taskName = ? and deadline = ?",
-    [data.username, data.title, data.deadline],
+    "delete from task where userName = ? and taskName = ?",
+    [data.username, data.title],
     function (error, results, fields) {
       if(error)
         res.json({msg: error});
