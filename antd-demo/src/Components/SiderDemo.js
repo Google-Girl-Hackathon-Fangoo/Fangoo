@@ -299,7 +299,8 @@ export default class SiderDemo extends Component{
       }).then((response)=>{
         console.log(response.data)
         if (response.data.msg === 'success'){
-          user_name=values.name;
+          console.log(values.username);
+          user_name=values.username;
           message.success('Login Succed!')
         }else{
           message.warn('Login Failed')
