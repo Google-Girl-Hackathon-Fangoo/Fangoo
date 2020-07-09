@@ -56,6 +56,7 @@ class ChooseForm extends Component{
 }
 var li = ["Jack", "Tom"];
 var deltasksel="";
+var username="NULL";
 function onChangeS(value) {
   deltasksel=value;
   console.log(`selected ${value}`);
@@ -72,19 +73,25 @@ function onFocusS() {
 function onSearchS(val) {
   console.log("search:", val);
 }
-var itemList = [];
+/*
 for (let item of li) {
   itemList.push(<Option value={item}>{item}</Option>);
 }
+*/
 class SiderTwoCopy extends Component{
   constructor(props){
     super(props);
     this.user_name="NULL";
+    this.taskoptions=[];
+    this.deltask=[];
   };
   componentWillMount(){
     console.log(this.props);
-    this.user_name=this.props.match.params.name;
-    console.log(this.props.match.params.name);
+    this.user_name=this.props.location.query.name;
+    this.taskoptions=this.props.location.query.task;
+    this.deltask=this.props.location.query.deltask;
+  }
+  componentDidMount(){
   }
   state = { visible: false,type: true,
             visible1: false};
@@ -283,7 +290,7 @@ class SiderTwoCopy extends Component{
           >
             <SubMenu key="sub1" icon={<CarryOutOutlined />} title="Task">
             {/*<MyList data={data1}/>  */}
-            <Checkbox.Group options={options} onChange={onChange} />
+            <Checkbox.Group options={this.taskoptions} onChange={onChange} />
             <div align='right'>
             <Button shape="circle" onClick={this.showModal}>-</Button>
             <Modal
@@ -308,7 +315,7 @@ class SiderTwoCopy extends Component{
                     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                   }
                 >
-                  {itemList}
+                  {this.deltask}
                 </Select>
                 <Button htmlType="submit">确认删除</Button>
                 </Form>
@@ -325,4 +332,5 @@ class SiderTwoCopy extends Component{
     
   )}
 }
+
 export default SiderTwoCopy;

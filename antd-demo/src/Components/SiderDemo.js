@@ -142,6 +142,8 @@ function handleChange(value) {
   console.log(`selected ${value}`);
 }
 var selected_id=0;
+var task=[];
+var deltask=[];
 export default class SiderDemo extends Component{
   state = { visible: false,visible1: false,visible2: false,
     visible3:false,visible4:false,visible5:false,
@@ -412,6 +414,19 @@ export default class SiderDemo extends Component{
         }
       })
     }
+    const Onload1 = (values) => {
+      console.log(values)
+      axios.post("/users/personaltask/queryday",
+        {data:{ username: user_name,date:"2020-07-09"}}
+      ).then((response)=>{
+        console.log(response.data)
+        for (let item of response.data) {
+          task.push(item.taskName);
+          deltask.push(<Option value={item.taskName}>{item.taskName}</Option>);
+        }
+        console.log(task);
+      })
+    }
     return (
     <Layout>
       <Header className="header">
@@ -419,7 +434,7 @@ export default class SiderDemo extends Component{
         <div className="logo" />
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
           <Menu.Item key="1"><Link to="/SiderDemo">page 1</Link></Menu.Item>
-          <Menu.Item key="2"><Link to={"/SiderTwo"+"/"+user_name}>page 2</Link></Menu.Item>
+          <Button onClick={Onload1}><Link to={{pathname:'/SiderTwo',query:{name:user_name,task:task,deltask:deltask}}}>page 2</Link></Button>
           <Menu.Item key="3">page 3</Menu.Item>
           <Menu.Item key="4">page 4</Menu.Item>
         </Menu>
@@ -497,7 +512,7 @@ export default class SiderDemo extends Component{
             style={{ height: '100%', borderRight: 0 }}
           >
             <SubMenu key="sub1" icon={<UserOutlined />} title="个人信息">
-              <Menu.Item key="1"><Link to={"/SiderTwo"+"/"+user_name}>日程</Link></Menu.Item>
+              <Button type='text' onClick={Onload1}><Link to={{pathname:'/SiderTwo',query:{name:user_name,task:task,deltask:deltask}}}>日程</Link></Button>
               <Menu.Item key="2">近期使用情况</Menu.Item>
               <div align='middle'>
               <Button type='text' onClick={this.showModal1}>
