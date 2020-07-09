@@ -123,7 +123,7 @@ class SiderTwoCopy extends Component{
       axios.post("/task/insert",{
         data: {username:this.user_name,title:values.title,
           deadline:values.deadline.format('YYYY-MM-DD HH:mm:ss'),
-          desciption:values.desciption
+          description:values.description
         }
       }).then((response)=>{
         console.log(response.data)
