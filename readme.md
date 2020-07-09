@@ -47,7 +47,7 @@ API list
 
   ​	/sign_in/done
 
-  ​		"data":{"flockId": xxx, "username": xxx, "getTime": xxx}
+  ​		"data":{"flockId": xxx, "username": xxx}
 
 - [ ] calendar
 
