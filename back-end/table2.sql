@@ -29,15 +29,17 @@ create table flockUser (
   primary key(flockId, usersName)
 )
 
+drop table if exists task;
 create table task (
-  usersName varchar(50),
+  userName varchar(50),
   finish int default 0,
   flockId int,
-  taskName text,
-  annotation text,
+  taskName varchar(50),
+  `explain` text,
   startTime datetime,
   endTime datetime,
   deadline datetime,
-  foreign key(usersName) references users(username),
+	primary key(userName, taskName, deadline),
+  foreign key(userName) references users(username),
   foreign key(flockId) references flock(flockId)
-)
+);
