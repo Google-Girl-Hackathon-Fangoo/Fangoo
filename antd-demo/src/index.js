@@ -13,6 +13,7 @@ import * as serviceWorker from './serviceWorker';
 import SiderTwo from './Components/SiderTwo';
 import SiderTwoCopy from './Components/SiderTwoCopy';
 import SiderThree from './Components/SiderThree';
+import SiderFour from "./Components/SiderFour";
 const hashHistory = createHashHistory();
 
 render((
@@ -23,6 +24,8 @@ render((
         <Route path="/MyRegister" component={MyRegister}/>
         <Route path="/SiderTwo" component={SiderTwo}/>
         <Route path="/SiderTwoCopy" component={SiderTwoCopy}/>
+        <Route path="/SiderThree" component={SiderThree}/>
+        <Route path="/SiderFour" component={SiderFour}/>
     </Router>
 ), document.body);
 //), document.getElementById('root'));
