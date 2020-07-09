@@ -23,6 +23,7 @@ const data2 = [
   '今日?/总日程1',
   '今日?/总日程2',
 ];
+var name="";
 function onChange2(value, dateString) {
   console.log('Selected Time: ', value);
   console.log('Formatted Selected Time: ', dateString);
@@ -32,7 +33,18 @@ function onOk2(value) {
   console.log('onOk: ', value);
 }
 function onChange(checkedValues) {
-  console.log('checked = ', checkedValues);
+  for (let item of checkedValues) {
+    axios.post("/task/update",{
+      data: {username:name,title:item}
+    }).then((response)=>{
+      console.log(response.data)
+      if (response.data.msg === 'success'){
+        message.success('Update Succed!')
+      }else{
+        message.warn('Update Failed')
+      }
+    })
+  }
 }
 const options = [
   { label: 'Apple', value: 'Apple' },
@@ -88,10 +100,9 @@ class SiderTwoCopy extends Component{
   componentWillMount(){
     console.log(this.props);
     this.user_name=this.props.location.query.name;
+    name=this.user_name;
     this.taskoptions=this.props.location.query.task;
     this.deltask=this.props.location.query.deltask;
-  }
-  componentDidMount(){
   }
   state = { visible: false,type: true,
             visible1: false};
@@ -143,14 +154,14 @@ class SiderTwoCopy extends Component{
     }
     const onFinishS = (values) => {
       console.log(deltasksel)
-      axios.post("/users/deltask",{
-        data: values
+      axios.post("/task/delete",{
+        data: {username:this.user_name,title:deltasksel}
       }).then((response)=>{
         console.log(response.data)
         if (response.data.msg === 'success'){
-          message.success('Login Succed!')
+          message.success('Delete Succed!')
         }else{
-          message.warn('Login Failed')
+          message.warn('Delete Failed')
         }
       })
     }

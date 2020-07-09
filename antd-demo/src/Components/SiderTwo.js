@@ -42,9 +42,20 @@ class ChooseForm extends Component{
 var itemList=[];
 var task=[];
 var deltask=[];
+var name="";
 function onChange(checkedValues) {
-  console.log('checked = ', checkedValues);
-  //window.location.reload();
+  for (let item of checkedValues) {
+    axios.post("/task/update",{
+      data: {username:name,title:item}
+    }).then((response)=>{
+      console.log(response.data)
+      if (response.data.msg === 'success'){
+        message.success('Update Succed!')
+      }else{
+        message.warn('Update Failed')
+      }
+    })
+  }
 }
 const plainOptions = ['Apple', 'Pear', 'Orange'];
 const options = [
@@ -62,6 +73,7 @@ class SiderTwo extends Component{
   componentWillMount(){
     console.log(this.props);
     this.user_name=this.props.location.query.name;
+    name=this.user_name;
     this.taskoptions=this.props.location.query.task;
     this.deltask=this.props.location.query.deltask;
     console.log(this.taskoptions);
