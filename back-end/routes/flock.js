@@ -158,6 +158,37 @@ router.post('/drop', (req, res) => {
   )
 })
 
+// release flock announce
+router.post('/addflockannounce', function (req, res) {
+    data = req.body.data;
+    connection.query(
+        "select flockId from flock where adminName = ? and flockName = ?",
+        [data.flockCreater, data.flockName],
+        function (error, results, fields) {
+            if(error)
+                res.json({msg: error});
+            else
+            {
+                flockNum = results[0].flockId;
+                getTime = new Date();
+                connection.query(
+                    "insert into flockanno values(?, ?, ?, ?)",
+                    [flockNum, data.announcer, data.details, getTime],
+                    function(error, results, fields) {
+                        if (error)
+                            res.json({msg: error});
+                        else
+                            res.json({ msg: 'success'});
+                    }
+                );
+            }
+        }
+    );
+
+});
+
+
+
 module.exports = router;
 
 
