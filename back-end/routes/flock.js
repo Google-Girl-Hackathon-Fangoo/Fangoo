@@ -66,7 +66,7 @@ router.post('/deluser', (req, res) => {
   data = req.body.data
   console.log(data.username, data.flockid)
   connection.query(
-    "delete from flockUser where usersName = ? and flockId = ?values(?, ?, 0)", [data.username, data.flockid],
+    "delete from flockUser where usersName = ? and flockId = ?", [data.username, data.flockid],
     function(error, results, fields) {
       if (error) res.json({msg: error})
     }
