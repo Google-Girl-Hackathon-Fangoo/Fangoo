@@ -39,8 +39,23 @@ class ChooseForm extends Component{
   }
   
 }
+var itemList=[];
+var task=[];
+var deltask=[];
+var name="";
 function onChange(checkedValues) {
-  console.log('checked = ', checkedValues);
+  for (let item of checkedValues) {
+    axios.post("/task/update",{
+      data: {username:name,title:item}
+    }).then((response)=>{
+      console.log(response.data)
+      if (response.data.msg === 'success'){
+        message.success('Update Succed!')
+      }else{
+        message.warn('Update Failed')
+      }
+    })
+  }
 }
 const plainOptions = ['Apple', 'Pear', 'Orange'];
 const options = [
@@ -49,6 +64,20 @@ const options = [
   { label: 'Orange', value: 'Orange' },
 ];
 class SiderTwo extends Component{
+  constructor(props){
+    super(props);
+    this.user_name="NULL";
+    this.taskoptions=[];
+    this.deltask=[];
+  };
+  componentWillMount(){
+    console.log(this.props);
+    this.user_name=this.props.location.query.name;
+    name=this.user_name;
+    this.taskoptions=this.props.location.query.task;
+    this.deltask=this.props.location.query.deltask;
+    console.log(this.taskoptions);
+  }
   state = { visible: false,type: true};
   showDrawer1=() =>{
     this.setState({
@@ -88,11 +117,11 @@ class SiderTwo extends Component{
         <div className="logo" />
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
           <Menu.Item key="1"><Link to="/SiderDemo">page 1</Link></Menu.Item>
-          <Menu.Item key="2"><Link to="/SiderTwo">page 2</Link></Menu.Item>
-          <Menu.Item key="3"><Link to="/SiderThree">page 3</Link></Menu.Item>
+          <Menu.Item key="2"><Link to={{pathname:'/SiderTwo',query:{name:this.user_name,task:this.task,deltask:this.deltask}}}>page 2</Link></Menu.Item>
+          <Menu.Item key="3">page 3</Menu.Item>
           <Menu.Item key="4">page 4</Menu.Item>
         </Menu>
-       <Button type="primary">用户</Button>
+       <Button type="primary">{this.user_name}</Button>
         </Space>
       </Header>
       <Layout>
@@ -225,7 +254,6 @@ class SiderTwo extends Component{
         <Menu
             mode="inline"
             defaultSelectedKeys={['1']}
-            defaultOpenKeys={['sub1']}
             style={{ height: '100%', borderRight: 0 }}
           >
             <SubMenu key="sub1" icon={<CarryOutOutlined />} title="Task">
@@ -233,11 +261,13 @@ class SiderTwo extends Component{
             {/*<MyList data={data1}/> 
             <Checkbox.Group options={plainOptions} defaultValue={['Apple']} onChange={onChange} />
             */}
-            <Checkbox.Group options={options} /*defaultValue={['Pear']}*/ onChange={onChange} />
-            
+            <Checkbox.Group options={this.taskoptions} onChange={onChange} />
             <div align='right'>
+            <Tooltip title='Click twice'>
+            <Button type='primary' shape="circle"><Link to={{pathname:'/SiderTwoCopy',query:{name:this.user_name,task:this.taskoptions,deltask:this.deltask}}}>-</Link></Button>
+              </Tooltip>
               <Tooltip title='Click twice'>
-            <Button type='primary' shape="circle"><Link to="/SiderTwoCopy">+</Link></Button>
+            <Button type='primary' shape="circle"><Link to={{pathname:'/SiderTwoCopy',query:{name:this.user_name,task:this.taskoptions,deltask:this.deltask}}}>+</Link></Button>
               </Tooltip>
             </div>
             </SubMenu>

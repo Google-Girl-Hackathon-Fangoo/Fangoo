@@ -53,5 +53,15 @@ API list
 
 - [ ] task list
 
-- [ ] announcement
+- [x] announcement
 
+    /users/addflockannounce
+
+    ​	"data":  { "flockId": xxx, "announcer": xxx, "title": xxx,  "description": xxx, "deadline": xxx }
+
+
+- [x] create a flock
+
+    /users/addflock
+
+    ​	"data": {"username": xxx, "title": xxx}

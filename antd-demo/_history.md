@@ -153,3 +153,41 @@ It may be helpful to find the proper one in case we need to revert to the old ve
 ##### update4
 
 ​		add page3 group-schedule
+
+#### 2020.07.08
+
+##### update1
+
+​		update page layout 
+
+​		finish notification
+
+​		need page optimization
+
+​		next  function：签到、会议、任务、Add
+
+​		waiting to solve：报表，chat-box，load of data
+
+##### update2
+
+​		update page 1-- simple sign-in
+
+##### update3
+
+​		update page 1-- group schedule+task
+
+##### update4
+
+​		update page1 -- add group
+
+##### update5
+
+​		update page1 -- notification、send group notification
+
+##### update6
+
+​		update register
+
+##### update7
+
+​		update login with params sent by router

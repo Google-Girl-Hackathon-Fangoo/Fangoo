@@ -19,40 +19,6 @@ import { QuestionCircleOutlined } from "@ant-design/icons";
 import axios from 'axios';
 const { Option } = Select;
 const AutoCompleteOption = AutoComplete.Option;
-const residences = [
-  {
-    value: "zhejiang",
-    label: "Zhejiang",
-    children: [
-      {
-        value: "hangzhou",
-        label: "Hangzhou",
-        children: [
-          {
-            value: "xihu",
-            label: "West Lake"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    value: "jiangsu",
-    label: "Jiangsu",
-    children: [
-      {
-        value: "nanjing",
-        label: "Nanjing",
-        children: [
-          {
-            value: "zhonghuamen",
-            label: "Zhong Hua Men"
-          }
-        ]
-      }
-    ]
-  }
-];
 const formItemLayout = {
   labelCol: {
     xs: {
@@ -83,7 +49,7 @@ const tailFormItemLayout = {
     }
   }
 };
-
+var mail="NULL";
 const MyRegister= () => {
   const [form] = Form.useForm();
 
@@ -92,7 +58,7 @@ const MyRegister= () => {
     console.log("Received values of form: ", values);
   };
   */
- const onFinish = (values) => {
+const onFinish = (values) => {
   console.log(values)
   axios.post("/users/register",{
     data: values
@@ -102,6 +68,19 @@ const MyRegister= () => {
       message.success('Register Succed!')
     }else{
       message.warn('Register Failed')
+    }
+  })
+}
+const onCaptcha = (values) => {
+  console.log(mail);
+  axios.post("/users/captcha",{
+    data: {email:mail}
+  }).then((response)=>{
+    console.log(response.data)
+    if (response.data.msg === 'success'){
+      message.success('Captcha send Successfully!')
+    }else{
+      message.warn('Captcha cannot send!')
     }
   })
 }
@@ -140,12 +119,28 @@ const MyRegister= () => {
       form={form}
       name="register"
       onFinish={onFinish}
-      initialValues={{
-        residence: ["zhejiang", "hangzhou", "xihu"],
-        prefix: "86"
-      }}
       scrollToFirstError
     >
+      <Form.Item
+        name="username"
+        label={
+          <span>
+            Username&nbsp;
+            <Tooltip title="What do you want others to call you?">
+              <QuestionCircleOutlined />
+            </Tooltip>
+          </span>
+        }
+        rules={[
+          {
+            required: true,
+            message: "Please input your username!",
+            whitespace: true
+          }
+        ]}
+      >
+        <Input />
+      </Form.Item>
       <Form.Item
         name="email"
         label="E-mail"
@@ -170,13 +165,17 @@ const MyRegister= () => {
           {
             required: true,
             message: "Please input your password!"
-          }
+          },
+          ({ getFieldValue }) => ({
+            validator(rule, value) {
+              mail=getFieldValue("email");
+                return Promise.resolve();
+            }
+          })
         ]}
-        hasFeedback
       >
         <Input.Password />
       </Form.Item>
-
       <Form.Item
         name="confirm"
         label="Confirm Password"
@@ -202,60 +201,6 @@ const MyRegister= () => {
       >
         <Input.Password />
       </Form.Item>
-
-      <Form.Item
-        name="nickname"
-        label={
-          <span>
-            Nickname&nbsp;
-            <Tooltip title="What do you want others to call you?">
-              <QuestionCircleOutlined />
-            </Tooltip>
-          </span>
-        }
-        rules={[
-          {
-            required: true,
-            message: "Please input your nickname!",
-            whitespace: true
-          }
-        ]}
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item
-        name="residence"
-        label="Habitual Residence"
-        rules={[
-          {
-            type: "array",
-            required: true,
-            message: "Please select your habitual residence!"
-          }
-        ]}
-      >
-        <Cascader options={residences} />
-      </Form.Item>
-
-      <Form.Item
-        name="phone"
-        label="Phone Number"
-        rules={[
-          {
-            required: true,
-            message: "Please input your phone number!"
-          }
-        ]}
-      >
-        <Input
-          addonBefore={prefixSelector}
-          style={{
-            width: "100%"
-          }}
-        />
-      </Form.Item>
-
       <Form.Item
         label="Captcha"
         extra="We must make sure that your are a human."
@@ -276,10 +221,10 @@ const MyRegister= () => {
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Button>Get captcha</Button>
+            <Button onClick={onCaptcha}>Get captcha</Button>
           </Col>
         </Row>
-      </Form.Item>
+      </Form.Item> 
 
       <Form.Item
         name="agreement"
