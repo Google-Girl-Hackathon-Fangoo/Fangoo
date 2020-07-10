@@ -12,26 +12,7 @@ import axios from 'axios';
 const { Option } = Select;
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
-const data1 = [
-  'Group Notification',
-];
-const data2 = [
-  'Group Schedule',
-];
-const data21 = [
-  'Personal Schedule',
-];
-const data3 = [
-  'Group Task',
-];
-const data31 = [
-  'Personal Task',
-];
-const data4=[
-  'Notification1',
-  'Notification2',
-  'Notification3',
-];
+
 const options = [
   {
     value: 'Group1',
@@ -48,6 +29,8 @@ var selected_id=0;
 var notif=[];
 var task=[];
 var deltask=[];
+var groupid=[];
+var groupidcom=[];
 var idlist=[<Option value={1}>{1}</Option>];
 class LazyOptions extends React.Component {
   state = {
@@ -128,7 +111,7 @@ function onChange1(value, dateString) {
 function onOk1(value) {
   console.log('onOk: ', value);
 }
-var user_name="user1";
+var user_name="User";
 /*
 var children=[];
 const getuser=axios.get("/users")
@@ -180,6 +163,8 @@ export default class SiderDemo extends Component{
   }
   loadData = (values) => {
     notif=[];
+    groupid=[];
+    groupidcom=[];
     console.log(values[0].user_name)
     axios.post("/users/personaltask/queryflock",
       {data:{ flockid:selected_id,username: values[0].user_name,date:moment().format('YYYY-MM-DD')}}
@@ -190,7 +175,28 @@ export default class SiderDemo extends Component{
         //deltask.push(<Option value={item.taskName}>{item.taskName}</Option>);
       }
     })
+    axios.post("/users/lookflockid",
+      {data:{ userName: values[0].user_name,type:1}}
+    ).then((response)=>{
+      console.log(response)
+      for (let item of response.data) {
+        groupid.push(item.flockid);
+        //deltask.push(<Option value={item.taskName}>{item.taskName}</Option>);
+      }
+      console.log(groupid);
+    })
+    axios.post("/users/lookflockid",
+      {data:{ userName: values[0].user_name,type:0}}
+    ).then((response)=>{
+      console.log(response)
+      for (let item of response.data) {
+        groupidcom.push(item.flockid);
+        //deltask.push(<Option value={item.taskName}>{item.taskName}</Option>);
+      }
+    })
     this.setState({
+      groupidcom:groupidcom,
+      groupid:groupid,
       notif: notif,
       isLoading : false
     })
@@ -199,7 +205,8 @@ export default class SiderDemo extends Component{
     visible3:false,visible4:false,visible5:false,
     visible6:false,visible7:false,visible8:false,
     visibleaddm:false,visibledelm:false,visiblegiver:false,
-    visibledropr:false,visiblequit:false,visiblech:false};
+    visibledropr:false,visiblequit:false,visiblech:false,
+    visibleid:false};
     showModal = () => {
       this.setState({
         visible: true,
@@ -473,6 +480,23 @@ export default class SiderDemo extends Component{
       visiblech: false,
     });
   };
+  showModalid = () => {
+    this.setState({
+      visibleid: true,
+    });
+  };
+  handleOkid = e => {
+    console.log(e);
+    this.setState({
+      visibleid: false,
+    });
+  };
+  handleCancelid = e => {
+    console.log(e);
+    this.setState({
+      visibleid: false,
+    });
+  };
   render(){
     const checkindone = (values) => {
       console.log(values)
@@ -651,6 +675,10 @@ export default class SiderDemo extends Component{
       this.loadData([{"user_name":user_name}])
       console.log(values);
     }
+    const onFinishid = (values) => {
+      this.loadData([{"user_name":user_name}])
+      console.log(values);
+    }
     let {isLoading} = this.state
     console.log("render" + isLoading)
     /*
@@ -664,13 +692,11 @@ export default class SiderDemo extends Component{
     return (
     <Layout>
       <Header className="header">
-        <Space size={330}>
+        <Space size={385}>
         <div className="logo" />
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
           <Menu.Item key="1"><Link to="/SiderDemo">page 1</Link></Menu.Item>
           <Menu.Item key="2"><Link to={{pathname:'/SiderTwo',query:{name:user_name,task:task,deltask:deltask}}}>page 2</Link></Menu.Item>
-          <Menu.Item key="3">page 3</Menu.Item>
-          <Menu.Item key="4">page 4</Menu.Item>
         </Menu>
        <Button type="primary" onClick={this.showModal}>{user_name}</Button>
        <Modal
@@ -747,14 +773,16 @@ export default class SiderDemo extends Component{
           >
             <SubMenu key="sub1" icon={<UserOutlined />} title="个人信息">
               <Menu.Item key="1"><Link to={{pathname:'/SiderTwo',query:{name:user_name,task:task,deltask:deltask}}}>日程</Link></Menu.Item>
-              <Menu.Item key="2">近期使用情况</Menu.Item>
-              <div align='middle'>
+              {/*<Menu.Item key="2">近期使用情况</Menu.Item> */}
+            </SubMenu>
+            <SubMenu key="sub2" icon={<TeamOutlined />} title="小组合作"></SubMenu>
+            <div align='middle'>
               <Button type='text' onClick={this.showModal1}>
-                Notification
+                查看所有群id
               </Button>
               </div>
               <Modal
-                 title="Notification"
+                 title="查看所有群id"
                  visible={this.state.visible1}
                  onOk={this.handleOk1}
                  onCancel={this.handleCancel1}
@@ -765,32 +793,18 @@ export default class SiderDemo extends Component{
             defaultOpenKeys={['sub1','sub2','sub3']}
             style={{ height: '100%', borderRight: 0 }}
           >
-              <SubMenu key="sub1" icon={<NotificationOutlined />} title="Group Notification">
-                  <MyList data={this.state.notif}/> 
+              <SubMenu key="sub1" icon={<NotificationOutlined />} title="管理员">
+                  <MyList data={this.state.groupid}/> 
               </SubMenu>
-              <SubMenu key="sub2" icon={<ScheduleOutlined />} title="Schedule">
+              <SubMenu key="sub2" icon={<ScheduleOutlined />} title="普通成员">
                 <Row>
-                  <MyList data={data2}/>
+                  <MyList data={this.state.groupidcom}/>
                 </Row>
-                <Row>
-                  <MyList data={data21}/>
-                  </Row> 
-              </SubMenu>
-              <SubMenu key="sub3" icon={<CarryOutOutlined />} title="Task">
-              <Row>
-                  <MyList data={data3}/>
-                </Row>
-                <Row>
-                  <MyList data={data31}/>
-                  </Row> 
               </SubMenu>
                 </Menu>
               </Modal>
-            </SubMenu>
-            <SubMenu key="sub2" icon={<TeamOutlined />} title="小组合作"></SubMenu>
-            <Row>
               <div align='middle'>
-              <Button onClick={this.showModalch}>切换群</Button>
+              <Button type='text'onClick={this.showModalch}>切换群</Button>
               </div>
               <Modal
                  title="切换群"
@@ -825,9 +839,10 @@ export default class SiderDemo extends Component{
                   </Form.Item>
                   </Form>
                 </Modal>
-            </Row>
+              
             <Row>
           {/*<LazyOptions />*/}
+          {/*
           <Select
                   showSearch
                   style={{ width: 200 }}
@@ -843,17 +858,11 @@ export default class SiderDemo extends Component{
                 >
                   {idlist}
             </Select>
+                */}
           </Row>
           </Menu>
         </Sider>
         <Layout style={{ padding: '0 24px 24px' }}>
-          {/*
-        <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item>Home</Breadcrumb.Item>
-            <Breadcrumb.Item>List</Breadcrumb.Item>
-            <Breadcrumb.Item>App</Breadcrumb.Item>
-          </Breadcrumb>
-          */}
           <Content
             className="site-layout-background"
             style={{
@@ -862,7 +871,9 @@ export default class SiderDemo extends Component{
               minHeight: 280,
             }}
           >
+          <Row>
           flockId:{selected_id}
+          </Row>
           </Content>
         <Sider width={150} className="Quick-functions">
           <Menu
@@ -873,7 +884,8 @@ export default class SiderDemo extends Component{
             >
                 <SubMenu key="sub1" icon={<UsergroupAddOutlined />} title="Add">
                 <div align='middle'>
-                <Button type='text'>添加好友</Button>
+                  {/*
+                <Button type='text'>添加好友</Button> */}
                 <Button type='text' onClick={this.showModal6}>添加群</Button>
                 <Modal
                  title="添加群"
