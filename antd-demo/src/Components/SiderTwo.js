@@ -179,13 +179,11 @@ class SiderTwo extends Component{
     return (
     <Layout>
        <Header className="header">
-        <Space size={330}>
+        <Space size={385}>
         <div className="logo" />
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
           <Menu.Item key="1"><Link to="/SiderDemo">page 1</Link></Menu.Item>
           <Menu.Item key="2"><Link to={{pathname:'/SiderTwo',query:{name:this.user_name,task:this.task,deltask:this.deltask}}}>page 2</Link></Menu.Item>
-          <Menu.Item key="3">page 3</Menu.Item>
-          <Menu.Item key="4">page 4</Menu.Item>
         </Menu>
        <Button type="primary">{this.user_name}</Button>
         </Space>
