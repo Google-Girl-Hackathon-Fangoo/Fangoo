@@ -6,6 +6,7 @@ var mailer = require('./mailer.js');
 var verify = require('./verify');
 var flockRouter = require('./flock');
 var taskRouter = require('./task');
+var getflockidRouter = require('./getflockid');
 
 router.use((req, res, next) => {
   next();
@@ -141,6 +142,9 @@ router.post('/login', (req, res) => {
 
 // flock CRUD
 router.use('/', flockRouter);
+
+// look up flockid according to (username,type)
+router.use('/lookflockid', getflockidRouter);
 
 // create personal task
 router.use('/personaltask', taskRouter);
