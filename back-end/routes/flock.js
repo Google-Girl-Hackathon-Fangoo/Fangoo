@@ -57,7 +57,7 @@ router.post('/adduser', (req, res) => {
     "select authorityType from flockUser where flockId = ? and userName = ?", [data.flockid, data.username],
     function(error, results, fields) {
       if (error) res.json({msg: error})
-      else if (results[0] != 1)
+      else if (results[0] != '1')
         res.json({msg : 'failed because you are not admin'})
       else {
         connection.query(
@@ -80,7 +80,7 @@ router.post('/deluser', (req, res) => {
     "select authorityType from flockUser where flockId = ? and userName = ?", [data.flockid, data.username],
     function(error, results, fields) {
       if (error) res.json({msg: error})
-      else if (results[0] != 1)
+      else if (results[0] != '1')
         res.json({msg : 'failed because you are not admin'})
       else {
         connection.query(
@@ -117,7 +117,7 @@ router.post('/give', (req, res) => {
     "select authorityType from flockUser where flockId = ? and userName = ?", [data.flockid, data.username],
     function(error, results, fields) {
       if (error) res.json({msg: error})
-      else if (results[0] == undefined)
+      else if ((results[0] != '1'))
         res.json({msg : 'failed because you are not admin'})
       else {
         connection.query(
@@ -141,7 +141,7 @@ router.post('/drop', (req, res) => {
     "select authorityType from flockUser where flockId = ? and userName = ?", [data.flockid, data.username],
     function(error, results, fields) {
       if (error) res.json({msg: error})
-      else if (results[0] == undefined)
+      else if ((results[0] != '1'))
         res.json({msg : 'failed because you are not admin'})
       else {
         connection.query(
