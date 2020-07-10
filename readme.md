@@ -49,15 +49,15 @@
 
   + create `.env` file in the `server` folder and then fill it according to the following format
 
-  ```
-  DB_DATABASE=${YOUR_DATABASE_NAME}
-  DB_USER=${YOUR_USERNAME}
-  DB_PASS=${YOUR_PASSWORD}
-  CLOUD_SQL_CONNECTION_NAME=${YOUR_CLOUD_SQL_CONNECTION_NAME}
-  MAIL_HOST=${MAIL_HOST}
-  MAIL_FROM=${MAIL_SENDER_ACCOUNT}
-  MAIL_PASS=${MAIL_SENDER_PASSWORD}
-  ```
+      ```
+      DB_DATABASE=${YOUR_DATABASE_NAME}
+      DB_USER=${YOUR_USERNAME}
+      DB_PASS=${YOUR_PASSWORD}
+      CLOUD_SQL_CONNECTION_NAME=${YOUR_CLOUD_SQL_CONNECTION_NAME}
+      MAIL_HOST=${MAIL_HOST}
+      MAIL_FROM=${MAIL_SENDER_ACCOUNT}
+      MAIL_PASS=${MAIL_SENDER_PASSWORD}
+      ```
 
   + prepare `google cloud sql for mysql` in advance
   + run `gcloud app deploy` 
