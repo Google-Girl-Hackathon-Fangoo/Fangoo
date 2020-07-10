@@ -207,6 +207,55 @@ router.post('/addflockannounce', function (req, res) {
 });
 
 
+// arrange flock meeting time
+router.post('/addflockmeeting', function (req, res) {
+    data = req.body.data;
+    dbpool.connect(
+        "select authorityType from flockUser where flockId = ? and userName = ?",
+        [data.flockId, data.announcer],
+        function (error, results, fields) {
+            if (error)
+                res.json({msg: error});
+            else if(results[0].authorityType === 0)
+                res.json({msg: 'no admin'});
+            else
+            {
+                dbpool.connect(
+                    "select userName from flockUser where flockId = ?",
+                    [data.flockId],
+                    function (error, results, fields) {
+                        if (error)
+                            res.json({msg: error});
+                        else
+                        {
+                            flag = 0;
+                            for(var i=0; i<results.length;i++)
+                            {
+                                dbpool.connect(
+                                    "insert into task(userName, taskName, `explain`, flockId, startTime, endTime, finish) values(?, ?, ?, ?, ?, ?, 0)",
+                                    [results[i].userName, data.title, data.description, data.flockId, data.startTime, data.endTime, data.flockId],
+                                    function (error, results, fields) {
+                                        if(error) {
+                                            console.log(results[i]);
+                                            res.json({msg: error});
+                                            flag=1;
+                                        }
+                                    }
+                                );
+                                if(flag === 1)
+                                    break;
+                            }
+                            if(flag === 0)
+                                res.json({msg: 'success'});
+                        }
+                    }
+                );
+            }
+        }
+    );
+})
+
+
 module.exports = router;
 
 
