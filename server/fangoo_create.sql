@@ -1,3 +1,4 @@
+
 drop database if exists fangoo;
 create database fangoo;
 USE fangoo;
@@ -91,3 +92,6 @@ create table flockanno
 	foreign key(flockId) references flock(flockId),
 	foreign key(announcer) references users(username)
 );
+
+
+
