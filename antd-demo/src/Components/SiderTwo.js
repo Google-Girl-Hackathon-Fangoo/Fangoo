@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Form,Layout, Menu, Button, Space, Tooltip, Drawer, Select, message } from 'antd';
 import {Row,Col,Input,DatePicker,Checkbox} from 'antd';
 import { ScheduleOutlined, CarryOutOutlined } from '@ant-design/icons';
+import moment from 'moment';
 import 'antd/dist/antd.css';
 import './SiderTwo.css';
 import SiderDemo from './SiderDemo.js';
@@ -57,6 +58,14 @@ function onChange(checkedValues) {
     })
   }
 }
+function onChangedate(value, dateString) {
+  console.log('Selected Time: ', value);
+  console.log('Formatted Selected Time: ', dateString);
+}
+
+function onOkdate(value) {
+  console.log('onOk: ', value);
+}
 const plainOptions = ['Apple', 'Pear', 'Orange'];
 const options = [
   { label: 'Apple', value: 'Apple' },
@@ -66,17 +75,50 @@ const options = [
 class SiderTwo extends Component{
   constructor(props){
     super(props);
-    this.user_name="NULL";
+    //this.user_name="NULL";
+    this.user_name="1";
     this.taskoptions=[];
     this.deltask=[];
+    this.state = {
+      isLoading : false
+    }
   };
   componentWillMount(){
     console.log(this.props);
     this.user_name=this.props.location.query.name;
+  //  this.user_name=this.props.query.name;
     name=this.user_name;
     this.taskoptions=this.props.location.query.task;
     this.deltask=this.props.location.query.deltask;
+//    this.deltask=this.props.query.deltask;
     console.log(this.taskoptions);
+    
+    this.setState({
+      isLoading : true
+    })
+   // this.intervalId = setInterval(() => {
+    this.loadData([{"user_name":this.user_name}])
+    //}, 5000)
+  }
+  loadData = (values) => {
+    task=[];
+    deltask=[];
+    console.log(values[0].user_name)
+    axios.post("/users/personaltask/queryday",
+      {data:{ username: values[0].user_name,date:moment().format('YYYY-MM-DD')}}
+    ).then((response)=>{
+//      console.log(response.data)
+      for (let item of response.data) {
+        task.push(item.taskName);
+        deltask.push(<Option value={item.taskName}>{item.taskName}</Option>);
+      }
+    })
+    console.log(task)
+    console.log("set false")
+    this.setState({
+      taskoptions: task,
+      isLoading : false
+    })
   }
   state = { visible: false,type: true};
   showDrawer1=() =>{
@@ -99,8 +141,8 @@ class SiderTwo extends Component{
   render(){
     const onFinish = (values) => {
       console.log(values)
-      axios.post("/users/schedule",{
-        data: values
+      axios.post("/task/arrange",{
+        data: {username:this.user_name,title:values.title,date:values.date.format('YYYY-MM-DD HH:mm:ss')}
       }).then((response)=>{
         console.log(response.data)
         if (response.data.msg === 'success'){
@@ -110,6 +152,16 @@ class SiderTwo extends Component{
         }
       })
     }
+    let {isLoading} = this.state
+    console.log("render" + isLoading)
+    /*
+    if (isLoading){
+      return (
+        <div> waiting</div>
+      )
+    }*/
+      
+    console.log("render" + isLoading)
     return (
     <Layout>
        <Header className="header">
@@ -159,7 +211,8 @@ class SiderTwo extends Component{
             <Button type="primary" shape="circle" onClick={this.showDrawer1}>+</Button>
             </div>
           <Drawer
-            title="Create a new schedule"
+            //title="Create a new schedule"
+            title="arrange a schedule"
             width={720}
             onClose={this.onClose}
             visible={this.state.visible}
@@ -167,6 +220,29 @@ class SiderTwo extends Component{
           >
             {/*<ChooseForm type={this.state.type}/>*/}
           <Form layout="vertical" hideRequiredMark  onFinish={onFinish}>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                  name="title"
+                  label="Title"
+                rules={[{ required: true, message: 'Please enter title' }]}
+              >
+                <Input placeholder="Please enter title" />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+                <Form.Item
+                  name="date"
+                  label="date"
+                  rules={[{ required: true, message: 'Please choose the date' }]}
+                >
+                <DatePicker showTime onChange={onChangedate} onOk={onOkdate} />
+                </Form.Item>
+              </Col>
+          </Row>
+            {/*
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
@@ -234,6 +310,7 @@ class SiderTwo extends Component{
               </Form.Item>
             </Col>
           </Row>
+              */}
           <Form.Item>
                 <Button onClick={this.onClose} style={{ marginRight: 8 }}>
                     Cancel
@@ -261,7 +338,7 @@ class SiderTwo extends Component{
             {/*<MyList data={data1}/> 
             <Checkbox.Group options={plainOptions} defaultValue={['Apple']} onChange={onChange} />
             */}
-            <Checkbox.Group options={this.taskoptions} onChange={onChange} />
+            <Checkbox.Group options={this.state.taskoptions} onChange={onChange} />
             <div align='right'>
             <Tooltip title='Click twice'>
             <Button type='primary' shape="circle"><Link to={{pathname:'/SiderTwoCopy',query:{name:this.user_name,task:this.taskoptions,deltask:this.deltask}}}>-</Link></Button>
