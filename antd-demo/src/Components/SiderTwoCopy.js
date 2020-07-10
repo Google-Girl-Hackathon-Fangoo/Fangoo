@@ -72,6 +72,7 @@ var deltasksel="";
 var username="NULL";
 var task=[];
 var deltask=[];
+var schedule=[];
 function onChangeS(value) {
   deltasksel=value;
   console.log(`selected ${value}`);
@@ -118,6 +119,7 @@ class SiderTwoCopy extends Component{
   loadData = (values) => {
     task=[];
     deltask=[];
+    schedule=[];
     console.log(values[0].user_name)
     axios.post("/users/personaltask/queryday",
       {data:{ username: values[0].user_name,date:moment().format('YYYY-MM-DD')}}
@@ -128,9 +130,19 @@ class SiderTwoCopy extends Component{
         deltask.push(<Option value={item.taskName}>{item.taskName}</Option>);
       }
     })
+    axios.post("/users/personaltask/querydaily",
+      {data:{ username: values[0].user_name,date:moment().format('YYYY-MM-DD')}}
+    ).then((response)=>{
+      console.log(response)
+      for (let item of response.data) {
+        schedule.push(item.taskName);
+        //deltask.push(<Option value={item.taskName}>{item.taskName}</Option>);
+      }
+    })
     console.log(task)
     console.log("set false")
     this.setState({
+      schedule: schedule,
       deltask:deltask,
       taskoptions: task,
       isLoading : false
@@ -226,11 +238,10 @@ class SiderTwoCopy extends Component{
           <Menu
             mode="inline"
             defaultSelectedKeys={['1']}
-            defaultOpenKeys={['sub1']}
             style={{ height: '100%', borderRight: 0 }}
           >
             <SubMenu key="sub1" icon={<ScheduleOutlined />} title="Schedule">
-            <MyList data={data2}/> 
+            <MyList data={this.state.schedule}/> 
             </SubMenu>
           </Menu>
         </Sider>

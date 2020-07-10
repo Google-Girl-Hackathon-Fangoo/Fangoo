@@ -43,6 +43,7 @@ class ChooseForm extends Component{
 var itemList=[];
 var task=[];
 var deltask=[];
+var schedule=[];
 var name="";
 function onChange(checkedValues) {
   for (let item of checkedValues) {
@@ -79,6 +80,7 @@ class SiderTwo extends Component{
     this.user_name="1";
     this.taskoptions=[];
     this.deltask=[];
+    this.schedule=[];
     this.state = {
       isLoading : false
     }
@@ -103,19 +105,30 @@ class SiderTwo extends Component{
   loadData = (values) => {
     task=[];
     deltask=[];
+    schedule=[];
     console.log(values[0].user_name)
     axios.post("/users/personaltask/queryday",
       {data:{ username: values[0].user_name,date:moment().format('YYYY-MM-DD')}}
     ).then((response)=>{
-//      console.log(response.data)
+      //console.log(response.data)
       for (let item of response.data) {
         task.push(item.taskName);
         deltask.push(<Option value={item.taskName}>{item.taskName}</Option>);
       }
     })
+    axios.post("/users/personaltask/querydaily",
+      {data:{ username: values[0].user_name,date:moment().format('YYYY-MM-DD')}}
+    ).then((response)=>{
+      console.log(response)
+      for (let item of response.data) {
+        schedule.push(item.taskName);
+        //deltask.push(<Option value={item.taskName}>{item.taskName}</Option>);
+      }
+    })
     console.log(task)
     console.log("set false")
     this.setState({
+      schedule: schedule,
       taskoptions: task,
       isLoading : false
     })
@@ -181,11 +194,10 @@ class SiderTwo extends Component{
           <Menu
             mode="inline"
             defaultSelectedKeys={['1']}
-            defaultOpenKeys={['sub1']}
             style={{ height: '100%', borderRight: 0 }}
           >
             <SubMenu key="sub1" icon={<ScheduleOutlined />} title="Schedule">
-            <MyList data={data2}/> 
+            <MyList data={this.state.schedule}/> 
             </SubMenu>
           </Menu>
         </Sider>

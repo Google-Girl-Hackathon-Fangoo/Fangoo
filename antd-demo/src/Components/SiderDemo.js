@@ -547,7 +547,7 @@ export default class SiderDemo extends Component{
     const onFinishaddm = (values) => {
       console.log(values)
       axios.post("/users/adduser",{
-        data: {username:values.username,searchid:values.searchid,
+        data: {username:user_name,searchid:values.searchid,
               flockid:selected_id}
       }).then((response)=>{
         console.log(response.data)
@@ -561,7 +561,7 @@ export default class SiderDemo extends Component{
     const onFinishdelm = (values) => {
       console.log(values)
       axios.post("/users/deluser",{
-        data: {username:values.username,searchid:values.searchid,
+        data: {username:user_name,searchid:values.searchid,
               flockid:selected_id}
       }).then((response)=>{
         console.log(response.data)
@@ -575,7 +575,7 @@ export default class SiderDemo extends Component{
     const onFinishgiver = (values) => {
       console.log(values)
       axios.post("/users/give",{
-        data: {username:values.username,searchid:values.searchid,
+        data: {username:user_name,searchid:values.searchid,
               flockid:selected_id}
       }).then((response)=>{
         console.log(response.data)
@@ -589,7 +589,7 @@ export default class SiderDemo extends Component{
     const onFinishdropr = (values) => {
       console.log(values)
       axios.post("/users/drop",{
-        data: {username:values.username,searchid:values.searchid,
+        data: {username:user_name,searchid:values.searchid,
               flockid:selected_id}
       }).then((response)=>{
         console.log(response.data)
@@ -651,7 +651,6 @@ export default class SiderDemo extends Component{
         <div className="logo" />
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
           <Menu.Item key="1"><Link to="/SiderDemo">page 1</Link></Menu.Item>
-          {/*<Button onClick={Onload1}><Link to={{pathname:'/SiderTwo',query:{name:user_name,task:task,deltask:deltask}}}>page 2</Link></Button>*/}
           <Menu.Item key="2"><Link to={{pathname:'/SiderTwo',query:{name:user_name,task:task,deltask:deltask}}}>page 2</Link></Menu.Item>
           <Menu.Item key="3">page 3</Menu.Item>
           <Menu.Item key="4">page 4</Menu.Item>
@@ -730,7 +729,7 @@ export default class SiderDemo extends Component{
             style={{ height: '100%', borderRight: 0 }}
           >
             <SubMenu key="sub1" icon={<UserOutlined />} title="个人信息">
-              <Button type='text' onClick={Onload1}><Link to={{pathname:'/SiderTwo',query:{name:user_name,task:task,deltask:deltask}}}>日程</Link></Button>
+              <Menu.Item key="1"><Link to={{pathname:'/SiderTwo',query:{name:user_name,task:task,deltask:deltask}}}>日程</Link></Menu.Item>
               <Menu.Item key="2">近期使用情况</Menu.Item>
               <div align='middle'>
               <Button type='text' onClick={this.showModal1}>
@@ -1231,17 +1230,6 @@ export default class SiderDemo extends Component{
                  onCancel={this.handleCanceladdm}
                 >
                 <Form layout="vertical" hideRequiredMark onFinish={onFinishaddm}>
-                  <Row gutter={16}>
-                      <Col span={12}>
-                        <Form.Item
-                            name="username"
-                            label="username"
-                          rules={[{ required: true, message: 'Please enter username' }]}
-                        >
-                          <Input placeholder="Please enter username" />
-                        </Form.Item>
-                      </Col>
-                    </Row>
                     <Row gutter={16}>
                       <Col span={12}>
                         <Form.Item
@@ -1271,17 +1259,6 @@ export default class SiderDemo extends Component{
                  onCancel={this.handleCanceldelm}
                 >
                 <Form layout="vertical" hideRequiredMark onFinish={onFinishdelm}>
-                  <Row gutter={16}>
-                      <Col span={12}>
-                        <Form.Item
-                            name="username"
-                            label="username"
-                          rules={[{ required: true, message: 'Please enter username' }]}
-                        >
-                          <Input placeholder="Please enter username" />
-                        </Form.Item>
-                      </Col>
-                    </Row>
                     <Row gutter={16}>
                       <Col span={12}>
                         <Form.Item
@@ -1311,17 +1288,6 @@ export default class SiderDemo extends Component{
                  onCancel={this.handleCancelgiver}
                 >
                 <Form layout="vertical" hideRequiredMark onFinish={onFinishgiver}>
-                  <Row gutter={16}>
-                      <Col span={12}>
-                        <Form.Item
-                            name="username"
-                            label="username"
-                          rules={[{ required: true, message: 'Please enter username' }]}
-                        >
-                          <Input placeholder="Please enter username" />
-                        </Form.Item>
-                      </Col>
-                    </Row>
                     <Row gutter={16}>
                       <Col span={12}>
                         <Form.Item
@@ -1351,17 +1317,6 @@ export default class SiderDemo extends Component{
                  onCancel={this.handleCanceldropr}
                 >
                 <Form layout="vertical" hideRequiredMark onFinish={onFinishdropr}>
-                  <Row gutter={16}>
-                      <Col span={12}>
-                        <Form.Item
-                            name="username"
-                            label="username"
-                          rules={[{ required: true, message: 'Please enter username' }]}
-                        >
-                          <Input placeholder="Please enter username" />
-                        </Form.Item>
-                      </Col>
-                    </Row>
                     <Row gutter={16}>
                       <Col span={12}>
                         <Form.Item
