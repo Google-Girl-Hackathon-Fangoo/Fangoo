@@ -167,7 +167,7 @@ export default class SiderDemo extends Component{
     visible3:false,visible4:false,visible5:false,
     visible6:false,visible7:false,visible8:false,
     visibleaddm:false,visibledelm:false,visiblegiver:false,
-    visibledropr:false,visiblequit:false};
+    visibledropr:false,visiblequit:false,visiblech:false};
     showModal = () => {
       this.setState({
         visible: true,
@@ -423,6 +423,24 @@ export default class SiderDemo extends Component{
       visiblequit: false,
     });
   };
+
+  showModalch = () => {
+    this.setState({
+      visiblech: true,
+    });
+  };
+  handleOkch = e => {
+    console.log(e);
+    this.setState({
+      visiblech: false,
+    });
+  };
+  handleCancelch = e => {
+    console.log(e);
+    this.setState({
+      visiblech: false,
+    });
+  };
   render(){
     const checkindone = (values) => {
       console.log(values)
@@ -595,6 +613,10 @@ export default class SiderDemo extends Component{
         }
       })
     }
+    const onFinishch = (values) => {
+      selected_id=values.groupid;
+      console.log(values);
+    }
     const Onload1 = (values) => {
       //task=[];
       //deltask=[];
@@ -752,6 +774,42 @@ export default class SiderDemo extends Component{
               </Modal>
             </SubMenu>
             <SubMenu key="sub2" icon={<TeamOutlined />} title="小组合作"></SubMenu>
+            <Row>
+              <Button onClick={this.showModalch}>切换群</Button>
+              <Modal
+                 title="切换群"
+                 visible={this.state.visiblech}
+                 onOk={this.handleOkch}
+                 onCancel={this.handleCancelch}
+                >
+                <Form layout="vertical" hideRequiredMark  onFinish={onFinishch}>
+                  <Row gutter={16}>
+                    <Col span={24}>
+                      <Form.Item
+                        name="groupid"
+                        label="groupid"
+                        rules={[
+                          {
+                            required: true,
+                            message: 'please enter groupid',
+                          },
+                        ]}
+                      >
+                        <Input.TextArea rows={4} placeholder="please enter groupid" />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Form.Item>
+                        <Button onClick={this.onClose} style={{ marginRight: 8 }}>
+                            Cancel
+                          </Button>
+                        <Button htmlType='submit' onClick={this.onClose} type="primary" >
+                            Submit
+                        </Button>
+                  </Form.Item>
+                  </Form>
+                </Modal>
+            </Row>
             <Row>
           {/*<LazyOptions />*/}
           <Select
