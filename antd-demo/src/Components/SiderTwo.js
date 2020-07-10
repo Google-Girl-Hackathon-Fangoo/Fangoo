@@ -85,12 +85,12 @@ class SiderTwo extends Component{
   };
   componentWillMount(){
     console.log(this.props);
-  //  this.user_name=this.props.location.query.name;
-   /* this.user_name=this.props.query.name;
+    this.user_name=this.props.location.query.name;
+  //  this.user_name=this.props.query.name;
     name=this.user_name;
-    //this.taskoptions=this.props.location.query.task;
-  //  this.deltask=this.props.location.query.deltask;
-    this.deltask=this.props.query.deltask;
+    this.taskoptions=this.props.location.query.task;
+    this.deltask=this.props.location.query.deltask;
+//    this.deltask=this.props.query.deltask;
     console.log(this.taskoptions);
     
     this.setState({
@@ -98,7 +98,7 @@ class SiderTwo extends Component{
     })
    // this.intervalId = setInterval(() => {
     this.loadData([{"user_name":this.user_name}])
-    //}, 5000)*/
+    //}, 5000)
   }
   componentWillUnmount(){
     clearInterval(this.intervalId)
@@ -157,11 +157,11 @@ class SiderTwo extends Component{
     }
     let {isLoading} = this.state
     console.log("render" + isLoading)
-    if (isLoading){
+    /*if (isLoading){
       return (
         <div> waiting</div>
       )
-    }
+    }*/
       
     console.log("render" + isLoading)
     return (
