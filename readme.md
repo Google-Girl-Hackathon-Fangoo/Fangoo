@@ -66,6 +66,12 @@ API list
 
     ​	"data": {"username": xxx, "title": xxx}
 
+- [x] find flockid
+
+    /users/lookflockid
+
+    ​	"data": {"userName": xxx, "type": xxx}
+
 
 
 https://blog.csdn.net/weixin_33774615/article/details/91368524 React组件调用顺序constructor -> willMount -> render -> DidMount
