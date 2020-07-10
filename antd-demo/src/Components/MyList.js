@@ -20,7 +20,7 @@ export default class MyList extends Component{
             dataSource={this.data}
             renderItem={item => (
                 <List.Item>
-                <Typography.Text mark>[ITEM]</Typography.Text> {item}
+                <Typography.Text mark></Typography.Text> {item}
                 </List.Item>
             )}/>
             )

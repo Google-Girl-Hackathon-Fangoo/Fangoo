@@ -44,6 +44,10 @@ const options = [
     isLeaf: false,
   },
 ];
+var selected_id=0;
+var task=[];
+var deltask=[];
+var idlist=[<Option value={1}>{1}</Option>];
 class LazyOptions extends React.Component {
   state = {
     options,
@@ -86,7 +90,22 @@ class LazyOptions extends React.Component {
       )
   }
 };
+function onChangeS(value) {
+  selected_id=value;
+  console.log(`selected ${value}`);
+}
 
+function onBlurS() {
+  console.log("blur");
+}
+
+function onFocusS() {
+  console.log("focus");
+}
+
+function onSearchS(val) {
+  console.log("search:", val);
+}
 function onChange(checkedValues) {
   console.log('checked = ', checkedValues);
 }
@@ -142,11 +161,7 @@ for (let i = 10; i < 36; i++) {
 function handleChange(value) {
   console.log(`selected ${value}`);
 }
-var selected_id=0;
-var task=[];
-var deltask=[];
-var flockCreater="name1";
-var flockName="flock1";
+
 export default class SiderDemo extends Component{
   state = { visible: false,visible1: false,visible2: false,
     visible3:false,visible4:false,visible5:false,
@@ -484,7 +499,11 @@ export default class SiderDemo extends Component{
       axios.post("/users/addflock",{
         data: {username:user_name,title:values.groupname}
       }).then((response)=>{
-        console.log(response.data)
+        console.log(response);
+        selected_id=response.data.flockId;
+        idlist.push(<Option value={response.data.flockId}>{response.data.flockId}</Option>);
+        //idlist.push(response.data.flockId);
+        console.log(idlist);
         if (response.data.msg === 'success'){
           message.success('Create Succed!')
         }else{
@@ -495,8 +514,9 @@ export default class SiderDemo extends Component{
     const onFinish5 = (values) => {
       console.log(values)
       axios.post("/users/addflockannounce",{
-        data: {flockCreater:flockCreater,flockName:flockName,
-              announcer:user_name,details:values.notification}
+        data: {flockId:selected_id,
+              announcer:user_name,title:values.title,
+            description:values.description,deadline:values.deadline.format('YYYY-MM-DD HH:mm:ss')}
       }).then((response)=>{
         console.log(response.data)
         if (response.data.msg === 'success'){
@@ -733,7 +753,22 @@ export default class SiderDemo extends Component{
             </SubMenu>
             <SubMenu key="sub2" icon={<TeamOutlined />} title="小组合作"></SubMenu>
             <Row>
-          <LazyOptions />
+          {/*<LazyOptions />*/}
+          <Select
+                  showSearch
+                  style={{ width: 200 }}
+                  placeholder="Select a task"
+                  optionFilterProp="children"
+                  onChange={onChangeS}
+                  onFocus={onFocusS}
+                  onBlur={onBlurS}
+                  onSearch={onSearchS}
+                  filterOption={(input, option) =>
+                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  }
+                >
+                  {idlist}
+            </Select>
           </Row>
           </Menu>
         </Sider>
@@ -753,7 +788,7 @@ export default class SiderDemo extends Component{
               minHeight: 280,
             }}
           >
-          Chat Box
+          flockId:{selected_id}
           </Content>
         <Sider width={150} className="Quick-functions">
           <Menu
@@ -906,31 +941,66 @@ export default class SiderDemo extends Component{
                  onOk={this.handleOk8}
                  onCancel={this.handleCancel8}
                 >
-                <Form layout="vertical" hideRequiredMark  onFinish={onFinish5}>
-                  <Row gutter={16}>
-                    <Col span={24}>
-                      <Form.Item
-                        name="notification"
-                        label="Notification"
-                        rules={[
-                          {
-                            required: true,
-                            message: 'please enter notification',
-                          },
-                        ]}
-                      >
-                        <Input.TextArea rows={4} placeholder="please enter notification" />
-                      </Form.Item>
-                    </Col>
-                  </Row>
+                <Form layout="vertical" hideRequiredMark onFinish={onFinish5}>
+                    <Row gutter={16}>
+                      <Col span={12}>
+                        <Form.Item
+                            name="title"
+                            label="Title"
+                          rules={[{ required: true, message: 'Please enter to-do title' }]}
+                        >
+                          <Input placeholder="Please enter to-do title" />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col span={12}>
+                        <Form.Item
+                          name="type"
+                          label="Type"
+                          rules={[{ required: true, message: 'Please choose the type' }]}
+                        >
+                          <Select placeholder="Please choose the type">
+                            <Option value="group">Group</Option>
+                          </Select>
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={16}>
+                      <Col span={12}>
+                        <Form.Item
+                          name="deadline"
+                          label="DeadLine"
+                          rules={[{ required: true, message: 'Please choose the deadline' }]}
+                        >
+                         <DatePicker showTime onChange={onChange2} onOk={onOk2} />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={16}>
+                      <Col span={24}>
+                        <Form.Item
+                          name="description"
+                          label="Description"
+                          rules={[
+                            {
+                              required: true,
+                              message: 'please enter description',
+                            },
+                          ]}
+                        >
+                          <Input.TextArea rows={4} placeholder="please enter  description" />
+                        </Form.Item>
+                      </Col>
+                    </Row>
                   <Form.Item>
                         <Button onClick={this.onClose} style={{ marginRight: 8 }}>
-                            Cancel
-                          </Button>
-                        <Button htmlType='submit' onClick={this.onClose} type="primary" >
-                            Submit
+                          Cancel
                         </Button>
-                  </Form.Item>
+                        <Button htmlType='submit' onClick={this.onClose} type="primary">
+                          Submit
+                        </Button>
+                    </Form.Item>
                   </Form>
                 </Modal>
               <Row>
@@ -941,7 +1011,7 @@ export default class SiderDemo extends Component{
               </Row>
               
               </Modal>
-                
+                {/*
                 <Button type='text' onClick={this.showModal4}>安排群会议</Button>
                 <Modal
                  title="安排群会议"
@@ -1026,6 +1096,7 @@ export default class SiderDemo extends Component{
                   </Form.Item>
                   </Form>
                 </Modal>
+              
                 <Button type='text' onClick={this.showModal5}>增加群任务</Button>
                 <Modal
                  title="安排群任务"
@@ -1095,6 +1166,7 @@ export default class SiderDemo extends Component{
                     </Form.Item>
                   </Form>
                 </Modal>
+                        */}
                 <Button type='text' onClick={this.showModaladdm}>增加群成员</Button>
                 <Modal
                  title="添加群成员"
