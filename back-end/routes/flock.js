@@ -50,31 +50,110 @@ router.post('/addflock', (req, res) => {
 
 // add members
 router.post('/adduser', (req, res) => {
-    console.log(req.body);
-    data = req.body.data;
-    console.log(data.username, data.flockid);
-    connection.query(
-        "insert into flockUser values(?, ?, 0)", [data.username, data.flockid],
-        function(error, results, fields) {
-            if (error)
-                res.json({msg: error});
-            else
-                res.json({ msg: 'success'});
-        }
-    );
+  console.log(req.body)
+  data = req.body.data
+  console.log(data.username, data.searchid, data.flockid)
+  connection.query(
+    "select authorityType from flockUser where flockId = ? and userName = ?", [data.flockid, data.username],
+    function(error, results, fields) {
+      if (error) res.json({msg: error})
+      else if (results[0] != 1)
+        res.json({msg : 'failed because you are not admin'})
+      else {
+        connection.query(
+          "insert into flockUser values(?, ?, 0)", [data.searchid, data.flockid],
+          function(error, results, fields) {
+            if (error) res.json({msg: error})
+          }
+        )
+        res.json({ msg: 'success'})
+      }
+    }
+  )
 });
 
 router.post('/deluser', (req, res) => {
-    console.log(req.body)
-    data = req.body.data
-    console.log(data.username, data.flockid)
-    connection.query(
-        "delete from flockUser where usersName = ? and flockId = ?", [data.username, data.flockid],
-        function(error, results, fields) {
+  console.log(req.body)
+  data = req.body.data
+  console.log(data.username, data.searchid, data.flockid)
+  connection.query(
+    "select authorityType from flockUser where flockId = ? and userName = ?", [data.flockid, data.username],
+    function(error, results, fields) {
+      if (error) res.json({msg: error})
+      else if (results[0] != 1)
+        res.json({msg : 'failed because you are not admin'})
+      else {
+        connection.query(
+          "delete from flockUser where userName = ? and flockId = ?", [data.searchid, data.flockid],
+          function(error, results, fields) {
             if (error) res.json({msg: error})
-        }
-    )
-    res.json({ msg: 'success'})
+          }
+        )
+        res.json({ msg: 'success'})
+      }
+    }
+  )
+})
+
+router.post('/quit', (req, res) => {
+  console.log(req.body)
+  data = req.body.data
+  console.log(data.username, data.flockid)
+  connection.query(
+      "delete from flockUser where usersName = ? and flockId = ?", [data.username, data.flockid],
+      function(error, results, fields) {
+          if (error) res.json({msg: error})
+      }
+  )
+  res.json({ msg: 'success'})
+})
+
+// give authority to some members
+router.post('/give', (req, res) => {
+  console.log(req.body)
+  data = req.body.data
+  console.log(data.username, data.searchid, data.flockid)
+  connection.query(
+    "select authorityType from flockUser where flockId = ? and userName = ?", [data.flockid, data.username],
+    function(error, results, fields) {
+      if (error) res.json({msg: error})
+      else if (results[0] == undefined)
+        res.json({msg : 'failed because you are not admin'})
+      else {
+        connection.query(
+          "update flockUser set authorityType = 1 where userName = ? and flockId = ?", [data.searchid, data.flockid],
+          function(error, results, fields) {
+            if (error) res.json({msg: error})
+          }
+        )
+        res.json({ msg: 'success'})
+      }
+    }
+  )
+})
+
+// drop authority of some members
+router.post('/drop', (req, res) => {
+  console.log(req.body)
+  data = req.body.data
+  console.log(data.username, data.searchid, data.flockid)
+  connection.query(
+    "select authorityType from flockUser where flockId = ? and userName = ?", [data.flockid, data.username],
+    function(error, results, fields) {
+      if (error) res.json({msg: error})
+      else if (results[0] == undefined)
+        res.json({msg : 'failed because you are not admin'})
+      else {
+        connection.query(
+          "update flockUser set authorityType = 0 where userName = ? and flockId = ?", [data.searchid, data.flockid],
+          function(error, results, fields) {
+            if (error) res.json({msg: error})
+          }
+        )
+        res.json({ msg: 'success'})
+      }
+    }
+  )
 })
 
 // release flock announce
