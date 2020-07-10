@@ -1,29 +1,17 @@
 import React,{ Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Form, Layout, Menu, Button, Space, Tooltip, Drawer, Select, message } from 'antd';
-import {Modal,Row,Col,Input,DatePicker,Checkbox} from 'antd';
+import { Modal, Row, Col, Input, DatePicker, Checkbox} from 'antd';
 import { ScheduleOutlined, CarryOutOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import 'antd/dist/antd.css';
 import './SiderTwoCopy.css';
-import SiderDemo from './SiderDemo.js';
 import MyCalendar from './MyCalendar.js';
-import MyCard from './MyCard.js';
 import MyList from './MyList.js';
-import MyForm1 from './MyForm1.js';
-import MyForm2 from './MyForm2.js';
 import axios from 'axios';
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 const { Option } = Select;
-const data1 = [
-  'to-do 1',
-  'to-do 2',
-];
-const data2 = [
-  '今日?/总日程1',
-  '今日?/总日程2',
-];
 var name="";
 function onChange2(value, dateString) {
   console.log('Selected Time: ', value);
@@ -47,29 +35,7 @@ function onChange(checkedValues) {
     })
   }
 }
-const options = [
-  { label: 'Apple', value: 'Apple' },
-  { label: 'Pear', value: 'Pear' },
-  { label: 'Orange', value: 'Orange' },
-];
-class ChooseForm extends Component{
-  constructor(props){
-    super(props);
-    this.type=props.type;
-  }
-  render(){
-    if (this.type){
-      return <MyForm1/>
-    }
-    else {
-      return <MyForm2/>
-    }
-  }
-  
-}
-var li = ["Jack", "Tom"];
 var deltasksel="";
-var username="NULL";
 var task=[];
 var deltask=[];
 var schedule=[];
@@ -89,11 +55,6 @@ function onFocusS() {
 function onSearchS(val) {
   console.log("search:", val);
 }
-/*
-for (let item of li) {
-  itemList.push(<Option value={item}>{item}</Option>);
-}
-*/
 class SiderTwoCopy extends Component{
   constructor(props){
     super(props);
@@ -124,7 +85,6 @@ class SiderTwoCopy extends Component{
     axios.post("/users/personaltask/queryday",
       {data:{ username: values[0].user_name,date:moment().format('YYYY-MM-DD')}}
     ).then((response)=>{
-//      console.log(response.data)
       for (let item of response.data) {
         task.push(item.taskName);
         deltask.push(<Option value={item.taskName}>{item.taskName}</Option>);
@@ -136,7 +96,6 @@ class SiderTwoCopy extends Component{
       console.log(response)
       for (let item of response.data) {
         schedule.push(item.taskName);
-        //deltask.push(<Option value={item.taskName}>{item.taskName}</Option>);
       }
     })
     console.log(task)
@@ -212,14 +171,7 @@ class SiderTwoCopy extends Component{
       this.loadData([{"user_name":this.user_name}])
     }
     let {isLoading} = this.state
-    console.log("render" + isLoading)
-    /*
-    if (isLoading){
-      return (
-        <div> waiting</div>
-      )
-    }*/
-      
+    console.log("render" + isLoading)      
     console.log("render" + isLoading)
     return (
     <Layout>
@@ -246,13 +198,6 @@ class SiderTwoCopy extends Component{
           </Menu>
         </Sider>
         <Layout style={{ padding: '0 24px 24px' }}>
-          {/*
-        <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item>Home</Breadcrumb.Item>
-            <Breadcrumb.Item>List</Breadcrumb.Item>
-            <Breadcrumb.Item>App</Breadcrumb.Item>
-          </Breadcrumb>
-          */}
           <Content
             className="site-layout-background"
             style={{
@@ -275,7 +220,6 @@ class SiderTwoCopy extends Component{
             visible={this.state.visible}
             bodyStyle={{ paddingBottom: 80 }}
           >
-           {/* <ChooseForm type={this.state.type}/> */}
           <Form layout="vertical" hideRequiredMark onFinish={onFinish}>
             <Row gutter={16}>
               <Col span={12}>
@@ -339,9 +283,6 @@ class SiderTwoCopy extends Component{
             </Form.Item>
           </Form>
         </Drawer>
-            {/* Sample1: <MyCard/> LIST may be better? */}
-            {/* Sample2: <MyList/>*/}
-            {/* Sample3: popup drawer */}
             </Space>
           </Content>
         <Sider width={150} className="Quick-functions">
@@ -351,7 +292,6 @@ class SiderTwoCopy extends Component{
             style={{ height: '100%', borderRight: 0 }}
           >
             <SubMenu key="sub1" icon={<CarryOutOutlined />} title="Task">
-            {/*<MyList data={data1}/>  */}
             <Checkbox.Group options={this.state.taskoptions} onChange={onChange} />
             <div align='right'>
             <Button shape="circle" onClick={this.showModal}>-</Button>
