@@ -340,7 +340,6 @@ class SiderTwoCopy extends Component{
             {/* Sample1: <MyCard/> LIST may be better? */}
             {/* Sample2: <MyList/>*/}
             {/* Sample3: popup drawer */}
-            <MyCard/>
             </Space>
           </Content>
         <Sider width={150} className="Quick-functions">
