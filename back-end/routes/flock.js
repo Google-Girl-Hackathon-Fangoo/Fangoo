@@ -56,7 +56,6 @@ router.post('/adduser', (req, res) => {
   connection.query(
     "select * from flockUser where flockId = ? and userName = ? and authorityType = 1", [data.flockid, data.username],
     function(error, results, fields) {
-      console.log(results[0])
       if (error) res.json({msg: error})
       else if (results[0] === undefined)
         res.json({msg : 'failed because you are not admin'})
@@ -80,7 +79,6 @@ router.post('/deluser', (req, res) => {
   connection.query(
     "select * from flockUser where flockId = ? and userName = ? and authorityType = 1", [data.flockid, data.username],
     function(error, results, fields) {
-      console.log(results[0])
       if (error) res.json({msg: error})
       else if (results[0] === undefined)
         res.json({msg : 'failed because you are not admin'})
@@ -118,7 +116,6 @@ router.post('/give', (req, res) => {
   connection.query(
     "select * from flockUser where flockId = ? and userName = ? and authorityType = 1", [data.flockid, data.username],
     function(error, results, fields) {
-      console.log(results[0])
       if (error) res.json({msg: error})
       else if (results[0] === undefined)
         res.json({msg : 'failed because you are not admin'})
@@ -143,7 +140,6 @@ router.post('/drop', (req, res) => {
   connection.query(
     "select * from flockUser where flockId = ? and userName = ? and authorityType = 1", [data.flockid, data.username],
     function(error, results, fields) {
-      console.log(results[0])
       if (error) res.json({msg: error})
       else if (results[0] === undefined)
         res.json({msg : 'failed because you are not admin'})
