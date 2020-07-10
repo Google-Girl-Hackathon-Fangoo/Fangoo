@@ -45,6 +45,7 @@ const options = [
   },
 ];
 var selected_id=0;
+var notif=[];
 var task=[];
 var deltask=[];
 var idlist=[<Option value={1}>{1}</Option>];
@@ -163,6 +164,37 @@ function handleChange(value) {
 }
 
 export default class SiderDemo extends Component{
+  constructor(props){
+    super(props);
+    this.notif=[];
+    this.state = {
+      isLoading : false
+    }
+  };
+  componentWillMount(){
+    console.log(this.props);
+    this.setState({
+      isLoading : true
+    })
+    this.loadData([{"user_name":user_name}])
+  }
+  loadData = (values) => {
+    notif=[];
+    console.log(values[0].user_name)
+    axios.post("/users/personaltask/queryflock",
+      {data:{ flockid:selected_id,username: values[0].user_name,date:moment().format('YYYY-MM-DD')}}
+    ).then((response)=>{
+      console.log(response.data)
+      for (let item of response.data) {
+        notif.push(item.taskName);
+        //deltask.push(<Option value={item.taskName}>{item.taskName}</Option>);
+      }
+    })
+    this.setState({
+      notif: notif,
+      isLoading : false
+    })
+  }
   state = { visible: false,visible1: false,visible2: false,
     visible3:false,visible4:false,visible5:false,
     visible6:false,visible7:false,visible8:false,
@@ -466,6 +498,7 @@ export default class SiderDemo extends Component{
         if (response.data.msg === 'success'){
           console.log(values.username);
           user_name=values.username;
+          this.loadData([{"user_name":user_name}])
           message.success('Login Succed!')
         }else{
           message.warn('Login Failed')
@@ -615,35 +648,19 @@ export default class SiderDemo extends Component{
     }
     const onFinishch = (values) => {
       selected_id=values.groupid;
+      this.loadData([{"user_name":user_name}])
       console.log(values);
     }
-    const Onload1 = (values) => {
-      //task=[];
-      //deltask=[];
-      axios.post("/users/personaltask/queryday",
-        {data:{ username: user_name,date:moment().format('YYYY-MM-DD')}}
-      ).then((response)=>{
-        console.log(response.data)
-        for (let item of response.data) {
-          task.push(item.taskName);
-          deltask.push(<Option value={item.taskName}>{item.taskName}</Option>);
-        }
-        /*
-        for (let item of response.data) {
-          var x=true;
-          for (let itemi of task){
-            if (itemi==item.taskName){
-              x=false;
-            }
-          }
-          if (x==true){
-            task.push(item.taskName);
-            deltask.push(<Option value={item.taskName}>{item.taskName}</Option>);
-          }
-        }
-        */
-      })
-    }
+    let {isLoading} = this.state
+    console.log("render" + isLoading)
+    /*
+    if (isLoading){
+      return (
+        <div> waiting</div>
+      )
+    }*/
+      
+    console.log("render" + isLoading)
     return (
     <Layout>
       <Header className="header">
@@ -749,7 +766,7 @@ export default class SiderDemo extends Component{
             style={{ height: '100%', borderRight: 0 }}
           >
               <SubMenu key="sub1" icon={<NotificationOutlined />} title="Group Notification">
-                  <MyList data={data1}/> 
+                  <MyList data={this.state.notif}/> 
               </SubMenu>
               <SubMenu key="sub2" icon={<ScheduleOutlined />} title="Schedule">
                 <Row>
@@ -772,7 +789,9 @@ export default class SiderDemo extends Component{
             </SubMenu>
             <SubMenu key="sub2" icon={<TeamOutlined />} title="小组合作"></SubMenu>
             <Row>
+              <div align='middle'>
               <Button onClick={this.showModalch}>切换群</Button>
+              </div>
               <Modal
                  title="切换群"
                  visible={this.state.visiblech}
@@ -1062,7 +1081,7 @@ export default class SiderDemo extends Component{
                 Group Notifications:
               </Row>
               <Row>
-                <MyList data={data4}/> 
+                <MyList data={this.state.notif}/> 
               </Row>
               
               </Modal>

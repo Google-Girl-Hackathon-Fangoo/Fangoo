@@ -353,7 +353,7 @@ class SiderTwo extends Component{
             <Checkbox.Group options={this.state.taskoptions} onChange={onChange} />
             <div align='right'>
             <Tooltip title='Click twice'>
-            <Button type='primary' shape="circle"><Link to={{pathname:'/SiderTwoCopy',query:{name:this.user_name,task:this.taskoptions,deltask:this.deltask}}}>-</Link></Button>
+            <Button shape="circle"><Link to={{pathname:'/SiderTwoCopy',query:{name:this.user_name,task:this.taskoptions,deltask:this.deltask}}}>-</Link></Button>
               </Tooltip>
               <Tooltip title='Click twice'>
             <Button type='primary' shape="circle"><Link to={{pathname:'/SiderTwoCopy',query:{name:this.user_name,task:this.taskoptions,deltask:this.deltask}}}>+</Link></Button>
