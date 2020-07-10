@@ -58,6 +58,14 @@ function onChange(checkedValues) {
     })
   }
 }
+function onChangedate(value, dateString) {
+  console.log('Selected Time: ', value);
+  console.log('Formatted Selected Time: ', dateString);
+}
+
+function onOkdate(value) {
+  console.log('onOk: ', value);
+}
 const plainOptions = ['Apple', 'Pear', 'Orange'];
 const options = [
   { label: 'Apple', value: 'Apple' },
@@ -67,7 +75,8 @@ const options = [
 class SiderTwo extends Component{
   constructor(props){
     super(props);
-    this.user_name="NULL";
+    //this.user_name="NULL";
+    this.user_name="1";
     this.taskoptions=[];
     this.deltask=[];
     this.state = {
@@ -135,8 +144,8 @@ class SiderTwo extends Component{
   render(){
     const onFinish = (values) => {
       console.log(values)
-      axios.post("/users/schedule",{
-        data: values
+      axios.post("/task/arrange",{
+        data: {username:this.user_name,title:values.title,date:values.date.format('YYYY-MM-DD HH:mm:ss')}
       }).then((response)=>{
         console.log(response.data)
         if (response.data.msg === 'success'){
@@ -204,7 +213,8 @@ class SiderTwo extends Component{
             <Button type="primary" shape="circle" onClick={this.showDrawer1}>+</Button>
             </div>
           <Drawer
-            title="Create a new schedule"
+            //title="Create a new schedule"
+            title="arrange a schedule"
             width={720}
             onClose={this.onClose}
             visible={this.state.visible}
@@ -212,6 +222,29 @@ class SiderTwo extends Component{
           >
             {/*<ChooseForm type={this.state.type}/>*/}
           <Form layout="vertical" hideRequiredMark  onFinish={onFinish}>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                  name="title"
+                  label="Title"
+                rules={[{ required: true, message: 'Please enter title' }]}
+              >
+                <Input placeholder="Please enter title" />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+                <Form.Item
+                  name="date"
+                  label="date"
+                  rules={[{ required: true, message: 'Please choose the date' }]}
+                >
+                <DatePicker showTime onChange={onChangedate} onOk={onOkdate} />
+                </Form.Item>
+              </Col>
+          </Row>
+            {/*
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
@@ -279,6 +312,7 @@ class SiderTwo extends Component{
               </Form.Item>
             </Col>
           </Row>
+              */}
           <Form.Item>
                 <Button onClick={this.onClose} style={{ marginRight: 8 }}>
                     Cancel
