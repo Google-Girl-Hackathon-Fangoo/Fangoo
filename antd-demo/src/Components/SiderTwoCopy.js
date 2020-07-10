@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Form, Layout, Menu, Button, Space, Tooltip, Drawer, Select, message } from 'antd';
 import {Modal,Row,Col,Input,DatePicker,Checkbox} from 'antd';
 import { ScheduleOutlined, CarryOutOutlined } from '@ant-design/icons';
+import moment from 'moment';
 import 'antd/dist/antd.css';
 import './SiderTwoCopy.css';
 import SiderDemo from './SiderDemo.js';
@@ -69,6 +70,8 @@ class ChooseForm extends Component{
 var li = ["Jack", "Tom"];
 var deltasksel="";
 var username="NULL";
+var task=[];
+var deltask=[];
 function onChangeS(value) {
   deltasksel=value;
   console.log(`selected ${value}`);
@@ -96,6 +99,9 @@ class SiderTwoCopy extends Component{
     this.user_name="NULL";
     this.taskoptions=[];
     this.deltask=[];
+    this.state = {
+      isLoading : false
+    }
   };
   componentWillMount(){
     console.log(this.props);
@@ -103,6 +109,32 @@ class SiderTwoCopy extends Component{
     name=this.user_name;
     this.taskoptions=this.props.location.query.task;
     this.deltask=this.props.location.query.deltask;
+    this.setState({
+      isLoading : true
+    })
+    this.loadData([{"user_name":this.user_name}])
+  }
+
+  loadData = (values) => {
+    task=[];
+    deltask=[];
+    console.log(values[0].user_name)
+    axios.post("/users/personaltask/queryday",
+      {data:{ username: values[0].user_name,date:moment().format('YYYY-MM-DD')}}
+    ).then((response)=>{
+//      console.log(response.data)
+      for (let item of response.data) {
+        task.push(item.taskName);
+        deltask.push(<Option value={item.taskName}>{item.taskName}</Option>);
+      }
+    })
+    console.log(task)
+    console.log("set false")
+    this.setState({
+      deltask:deltask,
+      taskoptions: task,
+      isLoading : false
+    })
   }
   state = { visible: false,type: true,
             visible1: false};
@@ -165,6 +197,16 @@ class SiderTwoCopy extends Component{
         }
       })
     }
+    let {isLoading} = this.state
+    console.log("render" + isLoading)
+    /*
+    if (isLoading){
+      return (
+        <div> waiting</div>
+      )
+    }*/
+      
+    console.log("render" + isLoading)
     return (
     <Layout>
        <Header className="header">
@@ -212,7 +254,7 @@ class SiderTwoCopy extends Component{
             <MyCalendar/>
             <div align='right'>
             <Tooltip title='Click twice'>
-            <Button type="primary" shape="circle"><Link to={"/SiderTwo"+"/"+this.user_name}>+</Link></Button>
+            <Button type="primary" shape="circle"><Link to={{pathname:'/SiderTwo',query:{name:this.user_name,task:task,deltask:deltask}}}>+</Link></Button>
             </Tooltip>
             </div>
             <Drawer
@@ -296,12 +338,11 @@ class SiderTwoCopy extends Component{
         <Menu
             mode="inline"
             defaultSelectedKeys={['1']}
-            defaultOpenKeys={['sub1']}
             style={{ height: '100%', borderRight: 0 }}
           >
             <SubMenu key="sub1" icon={<CarryOutOutlined />} title="Task">
             {/*<MyList data={data1}/>  */}
-            <Checkbox.Group options={this.taskoptions} onChange={onChange} />
+            <Checkbox.Group options={this.state.taskoptions} onChange={onChange} />
             <div align='right'>
             <Button shape="circle" onClick={this.showModal}>-</Button>
             <Modal
@@ -326,7 +367,7 @@ class SiderTwoCopy extends Component{
                     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                   }
                 >
-                  {this.deltask}
+                  {this.state.deltask}
                 </Select>
                 <Button htmlType="submit">确认删除</Button>
                 </Form>

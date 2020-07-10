@@ -100,9 +100,6 @@ class SiderTwo extends Component{
     this.loadData([{"user_name":this.user_name}])
     //}, 5000)
   }
-  componentWillUnmount(){
-    clearInterval(this.intervalId)
-  }
   loadData = (values) => {
     task=[];
     deltask=[];
@@ -157,7 +154,8 @@ class SiderTwo extends Component{
     }
     let {isLoading} = this.state
     console.log("render" + isLoading)
-    /*if (isLoading){
+    /*
+    if (isLoading){
       return (
         <div> waiting</div>
       )
