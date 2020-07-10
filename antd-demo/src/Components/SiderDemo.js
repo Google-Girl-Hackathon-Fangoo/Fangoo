@@ -1,98 +1,21 @@
 import React,{Component} from 'react';
 import 'antd/dist/antd.css';
 import './SiderDemo.css';
-import SiderTwo from './SiderTwo.js';
 import { Link, Route, BrowserRouter as Router } from 'react-router-dom';
 import moment from 'moment';
-import { Checkbox,Form,DatePicker,Col,Input,Select,message,Modal,Cascader, Row, Layout, Menu, Breadcrumb,Button,Space,Dropdown } from 'antd';
-import {LockOutlined,UserOutlined, TeamOutlined,UsergroupAddOutlined, ScheduleOutlined, CarryOutOutlined, NotificationOutlined } from '@ant-design/icons';
-import { DownOutlined } from '@ant-design/icons';
+import { Checkbox, Form, DatePicker, Col, Input, Select, message, Modal, Row, Layout, Menu, Button, Space } from 'antd';
+import { LockOutlined, UserOutlined, TeamOutlined, UsergroupAddOutlined, ScheduleOutlined, NotificationOutlined } from '@ant-design/icons';
 import MyList from './MyList.js';
 import axios from 'axios';
 const { Option } = Select;
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
-
-const options = [
-  {
-    value: 'Group1',
-    label: 'group1',
-    isLeaf: false,
-  },
-  {
-    value: 'Group2',
-    label: 'group2',
-    isLeaf: false,
-  },
-];
 var selected_id=0;
 var notif=[];
 var task=[];
 var deltask=[];
 var groupid=[];
 var groupidcom=[];
-var idlist=[<Option value={1}>{1}</Option>];
-class LazyOptions extends React.Component {
-  state = {
-    options,
-  };
-
-  onChange = (value, selectedOptions) => {
-    console.log(value, selectedOptions);
-  };
-  
-  loadData = selectedOptions => {
-    const targetOption = selectedOptions[selectedOptions.length - 1];
-    targetOption.loading = true;
-
-    // load options lazily
-    setTimeout(() => {
-      targetOption.loading = false;
-      targetOption.children = [
-        {
-          label: `${targetOption.label} Dynamic 1`,
-          value: 'dynamic1',
-        },
-        {
-          label: `${targetOption.label} Dynamic 2`,
-          value: 'dynamic2',
-        },
-      ];
-      this.setState({
-        options: [...this.state.options],
-      });
-    }, 1000);
-  };
-  render(){
-      return(
-          <Cascader
-              options={this.state.options}
-              loadData={this.loadData}
-              onChange={this.onChange}
-              changeOnSelect
-          />
-      )
-  }
-};
-function onChangeS(value) {
-  selected_id=value;
-  console.log(`selected ${value}`);
-}
-
-function onBlurS() {
-  console.log("blur");
-}
-
-function onFocusS() {
-  console.log("focus");
-}
-
-function onSearchS(val) {
-  console.log("search:", val);
-}
-function onChange(checkedValues) {
-  console.log('checked = ', checkedValues);
-}
 function onChange2(value, dateString) {
   console.log('Selected Time: ', value);
   console.log('Formatted Selected Time: ', dateString);
@@ -112,40 +35,10 @@ function onOk1(value) {
   console.log('onOk: ', value);
 }
 var user_name="User";
-/*
-var children=[];
-const getuser=axios.get("/users")
-    .then(res=>{
-      console.log(res);
-      children=res.data;
-      return res;
-    });
-var gg=getuser;
-*/
-class get_sign_in extends Component{
-  constructor(props){
-    super(props);
-  };
-  render(){
-    var children=[];
-    const getuser=axios.get("/sign_in/done")
-        .then(res=>{
-          console.log(res);
-          children=res.data;
-        return res;
-    });
-    var gg=getuser;
-    return children;
-  }
-}
 const children = [];
 for (let i = 10; i < 36; i++) {
   children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
 }
-function handleChange(value) {
-  console.log(`selected ${value}`);
-}
-
 export default class SiderDemo extends Component{
   constructor(props){
     super(props);
@@ -172,7 +65,6 @@ export default class SiderDemo extends Component{
       console.log(response.data)
       for (let item of response.data) {
         notif.push(item.taskName);
-        //deltask.push(<Option value={item.taskName}>{item.taskName}</Option>);
       }
     })
     axios.post("/users/lookflockid",
@@ -181,7 +73,6 @@ export default class SiderDemo extends Component{
       console.log(response)
       for (let item of response.data) {
         groupid.push(item.flockid);
-        //deltask.push(<Option value={item.taskName}>{item.taskName}</Option>);
       }
       console.log(groupid);
     })
@@ -191,7 +82,6 @@ export default class SiderDemo extends Component{
       console.log(response)
       for (let item of response.data) {
         groupidcom.push(item.flockid);
-        //deltask.push(<Option value={item.taskName}>{item.taskName}</Option>);
       }
     })
     this.setState({
@@ -543,32 +433,6 @@ export default class SiderDemo extends Component{
         }
       })
     }
-    const onFinish2 = (values) => {
-      console.log(values)
-      axios.post("/users/schedule",{
-        data: values
-      }).then((response)=>{
-        console.log(response.data)
-        if (response.data.msg === 'success'){
-          message.success('Create Succed!')
-        }else{
-          message.warn('Create Failed')
-        }
-      })
-    }
-    const onFinish3 = (values) => {
-      console.log(values)
-      axios.post("/users/task",{
-        data: values
-      }).then((response)=>{
-        console.log(response.data)
-        if (response.data.msg === 'success'){
-          message.success('Create Succed!')
-        }else{
-          message.warn('Create Failed')
-        }
-      })
-    }
     const onFinish4 = (values) => {
       console.log(values)
       axios.post("/users/addflock",{
@@ -576,9 +440,6 @@ export default class SiderDemo extends Component{
       }).then((response)=>{
         console.log(response);
         selected_id=response.data.flockId;
-        idlist.push(<Option value={response.data.flockId}>{response.data.flockId}</Option>);
-        //idlist.push(response.data.flockId);
-        console.log(idlist);
         if (response.data.msg === 'success'){
           message.success('Create Succed!')
         }else{
@@ -600,6 +461,7 @@ export default class SiderDemo extends Component{
           message.warn('Create Failed')
         }
       })
+      this.loadData([{"user_name":user_name}])
     }
     const onFinishaddm = (values) => {
       console.log(values)
@@ -675,19 +537,8 @@ export default class SiderDemo extends Component{
       this.loadData([{"user_name":user_name}])
       console.log(values);
     }
-    const onFinishid = (values) => {
-      this.loadData([{"user_name":user_name}])
-      console.log(values);
-    }
     let {isLoading} = this.state
     console.log("render" + isLoading)
-    /*
-    if (isLoading){
-      return (
-        <div> waiting</div>
-      )
-    }*/
-      
     console.log("render" + isLoading)
     return (
     <Layout>
@@ -773,7 +624,6 @@ export default class SiderDemo extends Component{
           >
             <SubMenu key="sub1" icon={<UserOutlined />} title="个人信息">
               <Menu.Item key="1"><Link to={{pathname:'/SiderTwo',query:{name:user_name,task:task,deltask:deltask}}}>日程</Link></Menu.Item>
-              {/*<Menu.Item key="2">近期使用情况</Menu.Item> */}
             </SubMenu>
             <SubMenu key="sub2" icon={<TeamOutlined />} title="小组合作"></SubMenu>
             <div align='middle'>
@@ -841,24 +691,6 @@ export default class SiderDemo extends Component{
                 </Modal>
               
             <Row>
-          {/*<LazyOptions />*/}
-          {/*
-          <Select
-                  showSearch
-                  style={{ width: 200 }}
-                  placeholder="Select a task"
-                  optionFilterProp="children"
-                  onChange={onChangeS}
-                  onFocus={onFocusS}
-                  onBlur={onBlurS}
-                  onSearch={onSearchS}
-                  filterOption={(input, option) =>
-                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                  }
-                >
-                  {idlist}
-            </Select>
-                */}
           </Row>
           </Menu>
         </Sider>
@@ -884,8 +716,6 @@ export default class SiderDemo extends Component{
             >
                 <SubMenu key="sub1" icon={<UsergroupAddOutlined />} title="Add">
                 <div align='middle'>
-                  {/*
-                <Button type='text'>添加好友</Button> */}
                 <Button type='text' onClick={this.showModal6}>添加群</Button>
                 <Modal
                  title="添加群"
@@ -1097,162 +927,6 @@ export default class SiderDemo extends Component{
               </Row>
               
               </Modal>
-                {/*
-                <Button type='text' onClick={this.showModal4}>安排群会议</Button>
-                <Modal
-                 title="安排群会议"
-                 visible={this.state.visible4}
-                 onOk={this.handleOk4}
-                 onCancel={this.handleCancel4}
-                >
-                <Form layout="vertical" hideRequiredMark  onFinish={onFinish2}>
-                  <Row gutter={16}>
-                    <Col span={12}>
-                      <Form.Item
-                          name="name"
-                          label="Name"
-                        rules={[{ required: true, message: 'Please enter user name' }]}
-                      >
-                        <Input placeholder="Please enter user name" />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col span={12}>
-                      <Form.Item
-                        name="type"
-                        label="Type"
-                        rules={[{ required: true, message: 'Please choose the type' }]}
-                      >
-                        <Select placeholder="Please choose the type">
-                          <Option value="group">Group</Option>
-                        </Select>
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  <Row gutter={16}>
-                    <Col span={12}>
-                      <Form.Item
-                        name="cooperator"
-                        label="Cooperator"
-                        rules={[{ required: true, message: 'Please choose the approver' }]}
-                      >
-                        <Select placeholder="Please choose the approver">
-                          <Option value="jack">Jack Ma</Option>
-                          <Option value="tom">Tom Liu</Option>
-                        </Select>
-                      </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                      <Form.Item
-                        name="dateTime"
-                        label="DateTime"
-                        rules={[{ required: true, message: 'Please choose the dateTime' }]}
-                      >
-                        <DatePicker.RangePicker
-                          style={{ width: '100%' }}
-                          getPopupContainer={trigger => trigger.parentNode}
-                        />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  <Row gutter={16}>
-                    <Col span={24}>
-                      <Form.Item
-                        name="description"
-                        label="Description"
-                        rules={[
-                          {
-                            required: true,
-                            message: 'please enter description',
-                          },
-                        ]}
-                      >
-                        <Input.TextArea rows={4} placeholder="please enter description" />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  <Form.Item>
-                        <Button onClick={this.onClose} style={{ marginRight: 8 }}>
-                            Cancel
-                          </Button>
-                        <Button htmlType='submit' onClick={this.onClose} type="primary" >
-                            Submit
-                        </Button>
-                  </Form.Item>
-                  </Form>
-                </Modal>
-              
-                <Button type='text' onClick={this.showModal5}>增加群任务</Button>
-                <Modal
-                 title="安排群任务"
-                 visible={this.state.visible5}
-                 onOk={this.handleOk5}
-                 onCancel={this.handleCancel5}
-                >
-                <Form layout="vertical" hideRequiredMark onFinish={onFinish3}>
-                    <Row gutter={16}>
-                      <Col span={12}>
-                        <Form.Item
-                            name="title"
-                            label="Title"
-                          rules={[{ required: true, message: 'Please enter to-do title' }]}
-                        >
-                          <Input placeholder="Please enter to-do title" />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col span={12}>
-                        <Form.Item
-                          name="type"
-                          label="Type"
-                          rules={[{ required: true, message: 'Please choose the type' }]}
-                        >
-                          <Select placeholder="Please choose the type">
-                            <Option value="group">Group</Option>
-                          </Select>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row gutter={16}>
-                      <Col span={12}>
-                        <Form.Item
-                          name="deadline"
-                          label="DeadLine"
-                          rules={[{ required: true, message: 'Please choose the deadline' }]}
-                        >
-                         <DatePicker showTime onChange={onChange2} onOk={onOk2} />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row gutter={16}>
-                      <Col span={24}>
-                        <Form.Item
-                          name="description"
-                          label="Description"
-                          rules={[
-                            {
-                              required: true,
-                              message: 'please enter description',
-                            },
-                          ]}
-                        >
-                          <Input.TextArea rows={4} placeholder="please enter  description" />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                  <Form.Item>
-                        <Button onClick={this.onClose} style={{ marginRight: 8 }}>
-                          Cancel
-                        </Button>
-                        <Button htmlType='submit' onClick={this.onClose} type="primary">
-                          Submit
-                        </Button>
-                    </Form.Item>
-                  </Form>
-                </Modal>
-                        */}
                 <Button type='text' onClick={this.showModaladdm}>增加群成员</Button>
                 <Modal
                  title="添加群成员"
