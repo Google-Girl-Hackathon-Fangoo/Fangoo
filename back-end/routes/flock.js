@@ -69,7 +69,7 @@ router.post('/deluser', (req, res) => {
     data = req.body.data
     console.log(data.username, data.flockid)
     connection.query(
-        "delete from flockUser where usersName = ? and flockId = ?", [data.username, data.flockid],
+        "delete from flockUser where userName = ? and flockId = ?", [data.username, data.flockid],
         function(error, results, fields) {
             if (error) res.json({msg: error})
         }
@@ -81,7 +81,7 @@ router.post('/deluser', (req, res) => {
 router.post('/addflockannounce', function (req, res) {
     data = req.body.data;
     connection.query(
-        "select authorityType from flockUser where flockId = ? and usersName = ?",
+        "select authorityType from flockUser where flockId = ? and userName = ?",
         [data.flockId, data.announcer],
         function (error, results, fields) {
             if (error)
@@ -91,7 +91,7 @@ router.post('/addflockannounce', function (req, res) {
             else
             {
                 connection.query(
-                    "select usersName from flockUser where flockId = ?",
+                    "select userName from flockUser where flockId = ?",
                     data.flockId,
                     function (error, results, fields) {
                         if (error)
@@ -103,7 +103,7 @@ router.post('/addflockannounce', function (req, res) {
                             {
                                 connection.query(
                                     "insert into task(userName, taskName, `explain`, deadline, flockId) values(?, ?, ?, ?, ?)",
-                                    [results[i].usersName, data.title, data.description, data.deadline, data.flockId],
+                                    [results[i].userName, data.title, data.description, data.deadline, data.flockId],
                                     function (error, results, fields) {
                                         if(error) {
                                             console.log(results[i]);
