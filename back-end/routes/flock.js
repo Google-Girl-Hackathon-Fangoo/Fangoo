@@ -56,6 +56,7 @@ router.post('/adduser', (req, res) => {
   connection.query(
     "select authorityType from flockUser where flockId = ? and userName = ?", [data.flockid, data.username],
     function(error, results, fields) {
+      console.log(results[0])
       if (error) res.json({msg: error})
       else if (results[0] != '1')
         res.json({msg : 'failed because you are not admin'})
