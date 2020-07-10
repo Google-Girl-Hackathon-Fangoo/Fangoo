@@ -1,3 +1,38 @@
+drop database if exists fangoo;
+create database fangoo;
+USE fangoo;
+
+drop table if exists users;
+create table users(
+  username varchar(50) primary key,
+  password varchar(50),
+  nickname varchar(50),
+  email varchar(50) unique
+);
+
+drop table if exists captcha;
+create table captcha(
+  email varchar(50),
+  captcha varchar(50),
+  getTime datetime
+);
+
+drop table if exists signType;
+create table signType(
+  flockId varchar(50),
+  beginTime datetime,
+  endTime datetime,
+  description text
+);
+
+drop table if exists signRecord;
+create table signRecord(
+  flockId varchar(50),
+  username varchar(50),
+  getTime datetime
+);
+
+drop table if exists flock;
 create table flock (
   flockId int auto_increment primary key,
   flockName text,
@@ -5,13 +40,13 @@ create table flock (
   foreign key(adminName) references users(username)
 );
 
--- 限制(管理员,群组号)唯一
+-- trigger (admin,flockName) unique
 delimiter $$
 create trigger tr_flock_before_insert
 before insert on flock
 for each row 
 begin 
-	DECLARE num int DEFAULT 0; 
+	declare num int default 0; 
 	select count(*) into num from flock where flockName=new.flockName and adminName=new.adminName;
 	if(num) then
 		insert into wrongtable values(0);
@@ -20,6 +55,7 @@ end;
 $$
 delimiter ;
 
+drop table if exists flockUser;
 create table flockUser (
   userName varchar(50),
   flockId int,
@@ -27,7 +63,7 @@ create table flockUser (
   foreign key(userName) references users(username),
   foreign key(flockId) references flock(flockId),
   primary key(flockId, userName)
-)
+);
 
 drop table if exists task;
 create table task (
@@ -54,30 +90,4 @@ create table flockanno
 	primary key(flockId, announcer, annoTime),
 	foreign key(flockId) references flock(flockId),
 	foreign key(announcer) references users(username)
-);
-
-CREATE TABLE users(
-  username VARCHAR(50) PRIMARY KEY,
-  password VARCHAR(50),
-  nickname VARCHAR(50),
-  email VARCHAR(50) UNIQUE
-);
-
-CREATE TABLE captcha(
-  email VARCHAR(50),
-  captcha VARCHAR(50),
-  getTime DATETIME
-);
-
-CREATE TABLE signType(
-  flockId VARCHAR(50),
-  beginTime DATETIME,
-  endTime DATETIME,
-  description TEXT
-);
-
-CREATE TABLE signRecord(
-  flockId VARCHAR(50),
-  username VARCHAR(50),
-  getTime DATETIME
 );
