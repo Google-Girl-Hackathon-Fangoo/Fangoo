@@ -54,11 +54,11 @@ router.post('/adduser', (req, res) => {
   data = req.body.data
   console.log(data.username, data.searchid, data.flockid)
   connection.query(
-    "select authorityType from flockUser where flockId = ? and userName = ?", [data.flockid, data.username],
+    "select * from flockUser where flockId = ? and userName = ? and authorityType = 1", [data.flockid, data.username],
     function(error, results, fields) {
       console.log(results[0])
       if (error) res.json({msg: error})
-      else if (results[0] != '1')
+      else if (results[0] === undefined)
         res.json({msg : 'failed because you are not admin'})
       else {
         connection.query(
@@ -78,10 +78,11 @@ router.post('/deluser', (req, res) => {
   data = req.body.data
   console.log(data.username, data.searchid, data.flockid)
   connection.query(
-    "select authorityType from flockUser where flockId = ? and userName = ?", [data.flockid, data.username],
+    "select * from flockUser where flockId = ? and userName = ? and authorityType = 1", [data.flockid, data.username],
     function(error, results, fields) {
+      console.log(results[0])
       if (error) res.json({msg: error})
-      else if (results[0] != '1')
+      else if (results[0] === undefined)
         res.json({msg : 'failed because you are not admin'})
       else {
         connection.query(
@@ -115,10 +116,11 @@ router.post('/give', (req, res) => {
   data = req.body.data
   console.log(data.username, data.searchid, data.flockid)
   connection.query(
-    "select authorityType from flockUser where flockId = ? and userName = ?", [data.flockid, data.username],
+    "select * from flockUser where flockId = ? and userName = ? and authorityType = 1", [data.flockid, data.username],
     function(error, results, fields) {
+      console.log(results[0])
       if (error) res.json({msg: error})
-      else if ((results[0] != '1'))
+      else if (results[0] === undefined)
         res.json({msg : 'failed because you are not admin'})
       else {
         connection.query(
@@ -139,10 +141,11 @@ router.post('/drop', (req, res) => {
   data = req.body.data
   console.log(data.username, data.searchid, data.flockid)
   connection.query(
-    "select authorityType from flockUser where flockId = ? and userName = ?", [data.flockid, data.username],
+    "select * from flockUser where flockId = ? and userName = ? and authorityType = 1", [data.flockid, data.username],
     function(error, results, fields) {
+      console.log(results[0])
       if (error) res.json({msg: error})
-      else if ((results[0] != '1'))
+      else if (results[0] === undefined)
         res.json({msg : 'failed because you are not admin'})
       else {
         connection.query(
