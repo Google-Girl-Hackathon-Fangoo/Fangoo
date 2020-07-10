@@ -195,6 +195,7 @@ class SiderTwoCopy extends Component{
           message.warn('Create Failed')
         }
       })
+      this.loadData([{"user_name":this.user_name}])
     }
     const onFinishS = (values) => {
       console.log(deltasksel)
@@ -208,6 +209,7 @@ class SiderTwoCopy extends Component{
           message.warn('Delete Failed')
         }
       })
+      this.loadData([{"user_name":this.user_name}])
     }
     let {isLoading} = this.state
     console.log("render" + isLoading)
@@ -342,7 +344,6 @@ class SiderTwoCopy extends Component{
             {/* Sample1: <MyCard/> LIST may be better? */}
             {/* Sample2: <MyList/>*/}
             {/* Sample3: popup drawer */}
-            <MyCard/>
             </Space>
           </Content>
         <Sider width={150} className="Quick-functions">

@@ -9,25 +9,25 @@ function getListData(value) {
   switch (value.date()) {
     case 8:
       listData = [
-        { type: 'warning', content: 'This is warning event.' },
-        { type: 'success', content: 'This is usual event.' },
+        { type: 'warning', content: 'Task1' },
+        { type: 'success', content: 'Task3' },
       ];
       break;
     case 10:
       listData = [
-        { type: 'warning', content: 'This is warning event.' },
-        { type: 'success', content: 'This is usual event.' },
-        { type: 'error', content: 'This is error event.' },
+        { type: 'warning', content: 'Task2' },
+        { type: 'success', content: 'Task10' },
+        { type: 'error', content: 'Task6' },
       ];
       break;
     case 15:
       listData = [
-        { type: 'warning', content: 'This is warning event' },
-        { type: 'success', content: 'This is very long usual event。。....' },
-        { type: 'error', content: 'This is error event 1.' },
-        { type: 'error', content: 'This is error event 2.' },
-        { type: 'error', content: 'This is error event 3.' },
-        { type: 'error', content: 'This is error event 4.' },
+        { type: 'warning', content: 'Task4' },
+        { type: 'success', content: 'Task7' },
+        { type: 'error', content: 'Task13' },
+        { type: 'error', content: 'Task8' },
+        { type: 'error', content: 'Task12' },
+        { type: 'error', content: 'Task5' },
       ];
       break;
     default:
@@ -59,7 +59,6 @@ function monthCellRender(value) {
   return num ? (
     <div className="notes-month">
       <section>{num}</section>
-      <span>Backlog number</span>
     </div>
   ) : null;
 }
